@@ -85,21 +85,19 @@ class Tensor:
         result = np.split(self.data, indices_or_sections, axis)
         return [Tensor(x, dtype=self.dtype, requires_grad=self.requires_grad) for x in result]
 
-    def _exec_op(self, t1, t2, _op):
-        if not isinstance(t2, Tensor):
-            t2 = Tensor(t2, dtype=t1.dtype)
+    def _exec_op(self, _op, *inputs):
+        inputs = [Tensor(t, dtype=inputs[0].dtype) if not isinstance(t, Tensor) else t for t in inputs]
 
-        result_tensor = Tensor(_op(t1, t2), dtype=t1.dtype,
-                               requires_grad=t1.requires_grad or t2.requires_grad)
+        result_tensor = Tensor(_op(*inputs), dtype=inputs[0].dtype, requires_grad=False)
 
-        if result_tensor.requires_grad:
+        if any(t.requires_grad for t in inputs):
+            result_tensor.requires_grad = True
             result_tensor.grad_fn = partial(_op.backward, result_tensor)
-            result_tensor._prev.append(t1)
-            result_tensor._prev.append(t2)
+            result_tensor._prev.extend(inputs)
 
         return result_tensor
 
     # Tensor Operations
     # TODO: Add more ops
-    def __add__(self, other): return self._exec_op(self, other, mlops.Add())
-    def __mul__(self, other): return self._exec_op(self, other, mlops.Mul())
+    def __add__(self, other): return self._exec_op(mlops.Add(), self, other)
+    def __mul__(self, other): return self._exec_op(mlops.Mul(), self, other)

@@ -1,6 +1,7 @@
 from neuroscribe.tensor import Function
 
 
+# ********** Binary ops **********
 class Add(Function):
     def forward(self, t1, t2): return t1.data + t2.data
 
