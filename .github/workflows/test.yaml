@@ -21,4 +21,4 @@ jobs:
     - name: Run mnist test
       run: ipython3 test/mnist.py
     - name: Run compare to torch test
-      run: ipython3 test/engine.py
+      run: ipython3 test/test_engine.py
