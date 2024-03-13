@@ -3,3 +3,4 @@
 
 # ignore __pycache__ dir
 __pycache__/
+neuroscribe/__pycache__/

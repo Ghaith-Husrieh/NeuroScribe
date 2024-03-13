@@ -101,3 +101,14 @@ class Tensor:
     # TODO: Add more ops
     def __add__(self, other): return self._exec_op(mlops.Add(), self, other)
     def __mul__(self, other): return self._exec_op(mlops.Mul(), self, other)
+    def add(self, other): return self._exec_op(mlops.Add(), self, other)
+    def mul(self, other): return self._exec_op(mlops.Mul(), self, other)
+    def sum(self): return self._exec_op(mlops.Sum(), self)
+    def dot(self, other): return self._exec_op( mlops.Dot(), self, other)
+    def relu(self): return self._exec_op(mlops.ReLU(), self)
+    def logsoftmax(self): return self._exec_op(mlops.LogSoftmax(), self)
+
+    def mean(self):
+        div = Tensor(np.array([1/self.data.size]), requires_grad=self.requires_grad)
+        return self.sum().mul(div)
+
