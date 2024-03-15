@@ -9,7 +9,7 @@ class Function:
         return self.forward(*args)
 
     def forward(self, *args): raise NotImplementedError(f"forward not implemented for {type(self)}")
-    def backward(self, grad_output): raise RuntimeError(f"backward not implemented for {type(self)}")
+    def backward(self, result_tensor): raise RuntimeError(f"backward not implemented for {type(self)}")
 
 
 import neuroscribe.mlops as mlops
@@ -97,7 +97,13 @@ class Tensor:
 
         return result_tensor
 
-    # Tensor Operations
-    # TODO: Add more ops
-    def __add__(self, other): return self._exec_op(mlops.Add(), self, other)
-    def __mul__(self, other): return self._exec_op(mlops.Mul(), self, other)
+    # ********** Activation functions **********
+    def ReLU(self): return self._exec_op(mlops.ReLU(), self)
+
+    # ********** Binary ops **********
+    def add(self, other): return self._exec_op(mlops.Add(), self, other)
+    def mul(self, other): return self._exec_op(mlops.Mul(), self, other)
+    def matmul(self, other): return self._exec_op(mlops.MatMul(), self, other)
+
+    def __add__(self, other): return self.add(other)
+    def __mul__(self, other): return self.mul(other)
