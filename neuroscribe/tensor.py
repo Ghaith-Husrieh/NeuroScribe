@@ -109,10 +109,22 @@ class Tensor:
     # ********** Loss functions **********
     def mse_loss(self, other): return self._exec_op(loss.MSELoss(), other)
 
+    # ********** Unary ops **********
+    def square(self): return self.mul(self)
+
     # ********** Binary ops **********
     def add(self, other): return self._exec_op(mlops.Add(), other)
+    def sub(self, other): return self._exec_op(mlops.Sub(), other)
     def mul(self, other): return self._exec_op(mlops.Mul(), other)
     def matmul(self, other): return self._exec_op(mlops.MatMul(), other)
 
+    # ********** Reduce ops **********
+    def sum(self): return self._exec_op(mlops.Sum())
+
+    def mean(self):
+        div = Tensor(np.array([1 / self.data.size]), requires_grad=self.requires_grad)
+        return self.sum().mul(div)
+
     def __add__(self, other): return self.add(other)
+    def __sub__(self, other): return self.sub(other)
     def __mul__(self, other): return self.mul(other)
