@@ -21,6 +21,15 @@ class Add(Function):
         t1.grad += result_tensor.grad
         t2.grad += result_tensor.grad
 
+class Sub(Function):
+    def forward(self, t1, t2):
+        return t1.data - t2.data
+
+    def backward(self, result_tensor):
+        t1, t2 = result_tensor._prev
+        t1.grad += result_tensor.grad
+        t2.grad -= result_tensor.grad
+
 
 class Mul(Function):
     def forward(self, t1, t2): return t1.data * t2.data
@@ -38,3 +47,13 @@ class MatMul(Function):
         t1, t2 = result_tensor._prev
         t1.grad += np.matmul(result_tensor.grad, t2.data.T)
         t2.grad += np.matmul(t1.data.T, result_tensor.grad)
+
+
+# ********** Reduce ops **********
+class Sum(Function):
+    def forward(self, t1):
+        return np.array([t1.data.sum()])
+
+    def backward(self, result_tensor):
+        (t1,) = result_tensor._prev
+        t1.grad += result_tensor.grad * np.ones_like(t1.data)
