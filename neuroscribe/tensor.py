@@ -88,6 +88,7 @@ class Tensor:
 
     def _exec_op(self, _op, *inputs):
         inputs = [Tensor(t, dtype=inputs[0].dtype) if not isinstance(t, Tensor) else t for t in inputs]
+        inputs = [self] + inputs
 
         result_tensor = Tensor(_op(*inputs), dtype=inputs[0].dtype, requires_grad=False)
 
@@ -99,15 +100,15 @@ class Tensor:
         return result_tensor
 
     # ********** Activation functions **********
-    def ReLU(self): return self._exec_op(mlops.ReLU(), self)
+    def relu(self): return self._exec_op(mlops.ReLU())
 
     # ********** Loss functions **********
-    def mse_loss(self, other): return self._exec_op(loss.MSELoss(), self, other)
+    def mse_loss(self, other): return self._exec_op(loss.MSELoss(), other)
 
     # ********** Binary ops **********
-    def add(self, other): return self._exec_op(mlops.Add(), self, other)
-    def mul(self, other): return self._exec_op(mlops.Mul(), self, other)
-    def matmul(self, other): return self._exec_op(mlops.MatMul(), self, other)
+    def add(self, other): return self._exec_op(mlops.Add(), other)
+    def mul(self, other): return self._exec_op(mlops.Mul(), other)
+    def matmul(self, other): return self._exec_op(mlops.MatMul(), other)
 
     def __add__(self, other): return self.add(other)
     def __mul__(self, other): return self.mul(other)
