@@ -122,7 +122,7 @@ class Tensor:
     def sum(self): return self._exec_op(mlops.Sum())
 
     def mean(self):
-        div = Tensor(np.array([1 / self.data.size]), requires_grad=self.requires_grad)
+        div = Tensor(np.array([1 / self.size]), requires_grad=self.requires_grad)
         return self.sum().mul(div)
 
     def __add__(self, other): return self.add(other)
