@@ -38,6 +38,10 @@ class Tensor:
     def ones(shape, dtype='float64'):
         return Tensor(np.ones(shape, dtype=dtype), dtype=dtype)
 
+    @staticmethod
+    def randn(*shape, dtype='float64'):
+        return Tensor(np.random.randn(*shape).astype(dtype), dtype=dtype)
+
     def backward(self):
         graph = []
         visited = set()
