@@ -12,6 +12,7 @@ class Function:
     def backward(self, result_tensor): raise RuntimeError(f"backward not implemented for {type(self)}")
 
 
+import neuroscribe.loss as loss
 import neuroscribe.mlops as mlops
 
 
@@ -99,6 +100,9 @@ class Tensor:
 
     # ********** Activation functions **********
     def ReLU(self): return self._exec_op(mlops.ReLU(), self)
+
+    # ********** Loss functions **********
+    def mse_loss(self, other): return self._exec_op(loss.MSELoss(), self, other)
 
     # ********** Binary ops **********
     def add(self, other): return self._exec_op(mlops.Add(), self, other)
