@@ -20,27 +20,52 @@ class Tensor:
 
     def __init__(self, data, dtype='float64', requires_grad=False, device='cpu'):
         self.data = np.array(data, dtype=dtype)
-        self.dtype = self.data.dtype
-        self.size = self.data.size
-        self.shape = self.data.shape
-        self.strides = self.data.strides
         self.device = device  # TODO: Add support to devices other than CPU
         self.requires_grad = requires_grad
-        self.grad = np.zeros(self.shape, dtype=self.dtype)
+        self._grad = None
         self.grad_fn = lambda: None
         self._prev = list()
 
-    @staticmethod
-    def zeros(shape, dtype='float64'):
-        return Tensor(np.zeros(shape, dtype=dtype), dtype=dtype)
+    @property
+    def dtype(self):
+        return self.data.dtype
+
+    @property
+    def shape(self):
+        return self.data.shape
+
+    @property
+    def size(self):
+        return self.data.size
+
+    @property
+    def strides(self):
+        return self.data.strides
+
+    @property
+    def grad(self):
+        if self.requires_grad:
+            if self._grad is None:
+                self._grad = np.zeros_like(self.data)
+            return self._grad
+        else:
+            return None
+
+    @grad.setter
+    def grad(self, value):
+        self._grad = value
 
     @staticmethod
-    def ones(shape, dtype='float64'):
-        return Tensor(np.ones(shape, dtype=dtype), dtype=dtype)
+    def zeros(shape, dtype='float64', requires_grad=False, device='cpu'):
+        return Tensor(np.zeros(shape, dtype=dtype), dtype=dtype, requires_grad=requires_grad, device=device)
 
     @staticmethod
-    def randn(*shape, dtype='float64'):
-        return Tensor(np.random.randn(*shape).astype(dtype), dtype=dtype)
+    def ones(shape, dtype='float64', requires_grad=False, device='cpu'):
+        return Tensor(np.ones(shape, dtype=dtype), dtype=dtype, requires_grad=requires_grad, device=device)
+
+    @staticmethod
+    def randn(*shape, dtype='float64', requires_grad=False, device='cpu'):
+        return Tensor(np.random.randn(*shape).astype(dtype), dtype=dtype, requires_grad=requires_grad, device=device)
 
     def backward(self):
         graph = []
@@ -88,7 +113,7 @@ class Tensor:
 
     def split(self, indices_or_sections, axis=0):
         result = np.split(self.data, indices_or_sections, axis)
-        return [Tensor(x, dtype=self.dtype, requires_grad=self.requires_grad) for x in result]
+        return [Tensor(t, dtype=self.dtype, requires_grad=self.requires_grad) for t in result]
 
     def _exec_op(self, _op, *inputs):
         inputs = [Tensor(t, dtype=inputs[0].dtype) if not isinstance(t, Tensor) else t for t in inputs]
