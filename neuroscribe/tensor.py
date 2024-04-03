@@ -1,7 +1,5 @@
 from functools import partial
 
-import numpy as np
-
 
 class Function:
     def __call__(self, *args):
@@ -12,19 +10,26 @@ class Function:
     def backward(self, result_tensor): raise RuntimeError(f"backward not implemented for {type(self)}")
 
 
-import neuroscribe.loss as loss
-import neuroscribe.mlops as mlops
+from neuroscribe.backend.cpu.cpu_backend import CPUBackend
+from neuroscribe.backend.cuda.cuda_backend import CUDABackend
+from neuroscribe.backend.mps.mps_backend import MPSBackend
 
 
 class Tensor:
 
-    def __init__(self, data, dtype='float64', requires_grad=False, device='cpu'):
-        self.data = np.array(data, dtype=dtype)
-        self.device = device  # TODO: Add support to devices other than CPU
+    _backends = {'cpu': CPUBackend, 'cuda': CUDABackend, 'mps': MPSBackend}
+
+    def __init__(self, data, backend, requires_grad=False):
+        self.data = data
         self.requires_grad = requires_grad
+        self._backend = backend
         self._grad = None
-        self.grad_fn = lambda: None
+        self._grad_fn = lambda: None
         self._prev = list()
+
+    @property
+    def device(self):
+        return self._backend.device
 
     @property
     def dtype(self):
@@ -46,7 +51,8 @@ class Tensor:
     def grad(self):
         if self.requires_grad:
             if self._grad is None:
-                self._grad = np.zeros_like(self.data)
+                # TODO: Replace with zeros_like() when implemented
+                self._grad = self._backend.zeros(self.shape, dtype=self.dtype)
             return self._grad
         else:
             return None
@@ -55,19 +61,10 @@ class Tensor:
     def grad(self, value):
         self._grad = value
 
-    @staticmethod
-    def zeros(shape, dtype='float64', requires_grad=False, device='cpu'):
-        return Tensor(np.zeros(shape, dtype=dtype), dtype=dtype, requires_grad=requires_grad, device=device)
-
-    @staticmethod
-    def ones(shape, dtype='float64', requires_grad=False, device='cpu'):
-        return Tensor(np.ones(shape, dtype=dtype), dtype=dtype, requires_grad=requires_grad, device=device)
-
-    @staticmethod
-    def randn(*shape, dtype='float64', requires_grad=False, device='cpu'):
-        return Tensor(np.random.randn(*shape).astype(dtype), dtype=dtype, requires_grad=requires_grad, device=device)
-
     def backward(self):
+        if not self.requires_grad:
+            raise RuntimeError('Gradient computation has not been enabled for this tensor.')
+
         graph = []
         visited = set()
 
@@ -75,69 +72,105 @@ class Tensor:
             if tensor not in visited:
                 visited.add(tensor)
                 for child in tensor._prev:
+                    if child.grad is None:
+                        raise RuntimeError('Gradient computation has not been enabled for one or more tensor(s).')
                     build_graph(child)
                 graph.append(tensor)
         build_graph(self)
 
-        self.grad = np.ones(self.shape, dtype=self.dtype)
+        self.grad = self._backend.ones(self.shape, dtype=self.dtype)  # TODO: Replace with ones_like() when implemented
         for tensor in reversed(graph):
-            tensor.grad_fn()
+            tensor._grad_fn()
 
     def __repr__(self):
         return f"Tensor({self.data}, dtype={self.dtype})"
 
     def is_contiguous(self):
-        return self.data.flags['C_CONTIGUOUS']
+        return self._backend.is_contiguous(self.data)
 
     def make_contiguous(self):
-        self.data = np.ascontiguousarray(self.data)
+        if self.is_contiguous():
+            return self
+        return Tensor(self._backend.make_contiguous(self.data), backend=self._backend, requires_grad=self.requires_grad)
 
     def deep_copy(self):
-        return Tensor(self.data.copy(), dtype=self.dtype, requires_grad=self.requires_grad)
+        return Tensor(self._backend.deep_copy(self.data), backend=self._backend, requires_grad=self.requires_grad)
 
     def shallow_copy(self):
-        return Tensor(self.data, dtype=self.dtype, requires_grad=self.requires_grad)
+        return Tensor(self._backend.shallow_copy(self.data), backend=self._backend, requires_grad=self.requires_grad)
 
-    def to(self, dtype):
-        if dtype == self.dtype:
+    @staticmethod
+    def _get_backend(device):
+        if device not in Tensor._backends:
+            raise ValueError(f"Unsupported device '{device}'. Supported devices are: {list(Tensor._backends.keys())}.")
+        return Tensor._backends[device]
+
+    # ********** Creation Methods **********
+    @staticmethod
+    def create(data, dtype='float32', requires_grad=False, device='cpu'):
+        backend = Tensor._get_backend(device)
+        return Tensor(backend.create(data, dtype=dtype), backend=backend, requires_grad=requires_grad)
+
+    @staticmethod
+    def zeros(shape, dtype='float32', requires_grad=False, device='cpu'):
+        backend = Tensor._get_backend(device)
+        return Tensor(backend.zeros(shape, dtype=dtype), backend=backend, requires_grad=requires_grad)
+
+    @staticmethod
+    def ones(shape, dtype='float32', requires_grad=False, device='cpu'):
+        backend = Tensor._get_backend(device)
+        return Tensor(backend.ones(shape, dtype=dtype), backend=backend, requires_grad=requires_grad)
+
+    @staticmethod
+    def randn(*shape, dtype='float32', requires_grad=False, device='cpu'):
+        backend = Tensor._get_backend(device)
+        return Tensor(backend.randn(*shape, dtype=dtype), backend=backend, requires_grad=requires_grad)
+
+    def to(self, device):
+        if self.device == device:
             return self
-        else:
-            return Tensor(self.data, dtype=dtype, requires_grad=self.requires_grad)
+        return Tensor.create(self.data, dtype=self.dtype, requires_grad=self.requires_grad, device=device)
 
-    # Shape manipulation methods
+    def astype(self, dtype):
+        if self.dtype == dtype:
+            return self
+        return Tensor.create(self.data, dtype=dtype, requires_grad=self.requires_grad, device=self.device)
+
+    # ********** Shape Manipulation Methods **********
     def reshape(self, new_shape):
-        return Tensor(self.data.reshape(new_shape), dtype=self.dtype, requires_grad=self.requires_grad)
+        return Tensor(self._backend.reshape(self.data, new_shape), backend=self._backend, requires_grad=self.requires_grad)
 
     def transpose(self, axes=None):
-        return Tensor(self.data.transpose(axes), dtype=self.dtype, requires_grad=self.requires_grad)
+        return Tensor(self._backend.transpose(self.data, axes), backend=self._backend, requires_grad=self.requires_grad)
 
     def split(self, indices_or_sections, axis=0):
-        result = np.split(self.data, indices_or_sections, axis)
-        return [Tensor(t, dtype=self.dtype, requires_grad=self.requires_grad) for t in result]
+        result = self._backend.split(self.data, indices_or_sections, axis)
+        return [Tensor.create(t, dtype=self.dtype, requires_grad=self.requires_grad, device=self.device) for t in result]
 
+    # ********** Tensor Operations **********
     def _exec_op(self, _op, *inputs):
-        inputs = [Tensor(t, dtype=inputs[0].dtype) if not isinstance(t, Tensor) else t for t in inputs]
+        inputs = [Tensor.create(input, dtype=self.dtype, requires_grad=self.requires_grad, device=self.device)
+                  if not isinstance(input, Tensor) else input for input in inputs]
         inputs = [self] + inputs
 
-        result_tensor = Tensor(_op(*inputs), dtype=inputs[0].dtype, requires_grad=False)
+        result_tensor = Tensor.create(_op(*inputs), dtype=inputs[0].dtype, requires_grad=False, device=self.device)
 
-        if any(t.requires_grad for t in inputs):
+        if any(input.requires_grad for input in inputs):
             result_tensor.requires_grad = True
-            result_tensor.grad_fn = partial(_op.backward, result_tensor)
+            result_tensor._grad_fn = partial(_op.backward, result_tensor)
             result_tensor._prev.extend(inputs)
 
         return result_tensor
 
-    # ********** Activation functions **********
-    def relu(self): return self._exec_op(mlops.ReLU())
+    # ********** Loss Functions **********
 
-    # ********** Loss functions **********
-    def mse_loss(self, other): return self._exec_op(loss.MSELoss(), other)
+    # ********** Activation Functions **********
+    def relu(self): return self._exec_op(self._backend.relu())
 
-    # ********** Binary ops **********
-    def add(self, other): return self._exec_op(mlops.Add(), other)
-    def mul(self, other): return self._exec_op(mlops.Mul(), other)
-    def matmul(self, other): return self._exec_op(mlops.MatMul(), other)
+    # ********** Binary Ops **********
+    def add(self, other): return self._exec_op(self._backend.add(), other)
+    def mul(self, other): return self._exec_op(self._backend.mul(), other)
+    def matmul(self, other): return self._exec_op(self._backend.matmul(), other)
 
     def __add__(self, other): return self.add(other)
     def __mul__(self, other): return self.mul(other)

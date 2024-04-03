@@ -1,0 +1,74 @@
+import cupy as cp
+import numpy as np
+
+import neuroscribe.backend.cpu.mlops as mlops
+
+
+class CPUBackend:
+
+    device = 'cpu'
+
+    @classmethod
+    def is_contiguous(cls, data):
+        return data.flags['C_CONTIGUOUS']
+
+    @classmethod
+    def make_contiguous(cls, data):
+        return np.ascontiguousarray(data)
+
+    @classmethod
+    def deep_copy(cls, data):
+        return data.copy(order='C')
+
+    @classmethod
+    def shallow_copy(cls, data):
+        return data.view()
+
+    # ********** Creation Methods **********
+    # TODO: should optimize when data is already a numpy.ndarray
+    @classmethod
+    def create(cls, data, dtype):
+        return np.array(data, dtype=dtype) if not isinstance(data, cp.ndarray) else cp.asnumpy(data)
+
+    @classmethod
+    def zeros(cls, shape, dtype):
+        return np.zeros(shape, dtype=dtype)
+
+    @classmethod
+    def ones(cls, shape, dtype):
+        return np.ones(shape, dtype=dtype)
+
+    @classmethod
+    def randn(cls, *shape, dtype):
+        return np.random.randn(*shape).astype(dtype)
+
+    # ********** Shape Manipulation Methods **********
+    @classmethod
+    def reshape(cls, data, new_shape):
+        return data.reshape(new_shape)
+
+    @classmethod
+    def transpose(cls, data, axes):
+        return data.transpose(axes)
+
+    @classmethod
+    def split(cls, data, indices_or_sections, axis):
+        return np.split(data, indices_or_sections, axis)
+
+    # ********** Activation Functions **********
+    @staticmethod
+    def relu():
+        return mlops.ReLU()
+
+    # ********** Binary Ops **********
+    @staticmethod
+    def add():
+        return mlops.Add()
+
+    @staticmethod
+    def mul():
+        return mlops.Mul()
+
+    @staticmethod
+    def matmul():
+        return mlops.MatMul()
