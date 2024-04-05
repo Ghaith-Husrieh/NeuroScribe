@@ -59,10 +59,23 @@ class CUDABackend:
     def relu():
         return mlops.ReLU()
 
+    # ********** Unary ops **********
+    @staticmethod
+    def mean():
+        return mlops.Mean()
+
+    @staticmethod
+    def square():
+        return mlops.Square()
+
     # ********** Binary Ops **********
     @staticmethod
     def add():
         return mlops.Add()
+
+    @staticmethod
+    def sub():
+        return mlops.Sub()
 
     @staticmethod
     def mul():

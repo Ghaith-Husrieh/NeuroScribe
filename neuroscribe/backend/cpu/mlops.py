@@ -12,6 +12,22 @@ class ReLU(Function):
         t1.grad += (result_tensor.data > 0) * result_tensor.grad
 
 
+class Mean(Function):
+    def forward(self, t1): return np.mean(t1.data)
+
+    def backward(self, result_tensor):
+        (t1,) = result_tensor._prev
+        t1.grad += result_tensor.grad / t1.data.size
+
+
+class Square(Function):
+    def forward(self, t1): return np.square(t1.data)
+
+    def backward(self, result_tensor):
+        (t1,) = result_tensor._prev
+        t1.grad += 2 * t1.data * result_tensor.grad
+
+
 # ********** Binary ops **********
 class Add(Function):
     def forward(self, t1, t2): return t1.data + t2.data
@@ -20,6 +36,15 @@ class Add(Function):
         t1, t2 = result_tensor._prev
         t1.grad += result_tensor.grad
         t2.grad += result_tensor.grad
+
+
+class Sub(Function):
+    def forward(self, t1, t2): return t1.data - t2.data
+
+    def backward(self, result_tensor):
+        t1, t2 = result_tensor._prev
+        t1.grad += result_tensor.grad
+        t2.grad -= result_tensor.grad
 
 
 class Mul(Function):

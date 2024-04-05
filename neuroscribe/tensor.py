@@ -3,13 +3,13 @@ from functools import partial
 
 class Function:
     def __call__(self, *args):
-        self.args = args
         return self.forward(*args)
 
     def forward(self, *args): raise NotImplementedError(f"forward not implemented for {type(self)}")
     def backward(self, result_tensor): raise RuntimeError(f"backward not implemented for {type(self)}")
 
 
+import neuroscribe.loss as loss
 from neuroscribe.backend.cpu.cpu_backend import CPUBackend
 
 available_backends = {'cpu': CPUBackend}
@@ -178,14 +178,23 @@ class Tensor:
         return result_tensor
 
     # ********** Loss Functions **********
+    def mse_loss(self, other): return loss.mse_loss(self, other)
 
     # ********** Activation Functions **********
     def relu(self): return self._exec_op(self._backend.relu())
 
+    # ********** Reduction Ops **********
+    def mean(self): return self._exec_op(self._backend.mean())
+
+    # ********** Unary Ops **********
+    def square(self): return self._exec_op(self._backend.square())
+
     # ********** Binary Ops **********
     def add(self, other): return self._exec_op(self._backend.add(), other)
+    def sub(self, other): return self._exec_op(self._backend.sub(), other)
     def mul(self, other): return self._exec_op(self._backend.mul(), other)
     def matmul(self, other): return self._exec_op(self._backend.matmul(), other)
 
     def __add__(self, other): return self.add(other)
+    def __sub__(self, other): return self.sub(other)
     def __mul__(self, other): return self.mul(other)
