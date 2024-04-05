@@ -11,13 +11,26 @@ class Function:
 
 
 from neuroscribe.backend.cpu.cpu_backend import CPUBackend
-from neuroscribe.backend.cuda.cuda_backend import CUDABackend
-from neuroscribe.backend.mps.mps_backend import MPSBackend
+
+available_backends = {'cpu': CPUBackend}
+
+try:
+    from neuroscribe.backend.cuda.cuda_backend import CUDABackend
+    available_backends['cuda'] = CUDABackend
+except ImportError:
+    pass
+
+try:
+    from neuroscribe.backend.mps.mps_backend import MPSBackend
+    available_backends['mps'] = MPSBackend
+except ImportError:
+    pass
 
 
 class Tensor:
 
-    _backends = {'cpu': CPUBackend, 'cuda': CUDABackend, 'mps': MPSBackend}
+    _supported_backends = ['cpu', 'cuda', 'mps']
+    _backends = available_backends
 
     def __init__(self, data, backend, requires_grad=False):
         self.data = data
@@ -101,8 +114,10 @@ class Tensor:
 
     @staticmethod
     def _get_backend(device):
+        if device not in Tensor._supported_backends:
+            raise ValueError(f"Unsupported device '{device}'. Supported devices are: {Tensor._supported_backends}.")
         if device not in Tensor._backends:
-            raise ValueError(f"Unsupported device '{device}'. Supported devices are: {list(Tensor._backends.keys())}.")
+            raise ValueError(f"NeuroScribe is not installed with support for {device.upper()} devices.")
         return Tensor._backends[device]
 
     # ********** Creation Methods **********

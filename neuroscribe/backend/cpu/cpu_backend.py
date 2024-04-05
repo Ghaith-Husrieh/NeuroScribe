@@ -1,7 +1,12 @@
-import cupy as cp
 import numpy as np
 
 import neuroscribe.backend.cpu.mlops as mlops
+
+try:
+    import cupy as cp
+    CUPY_AVAILABLE = True
+except ImportError:
+    CUPY_AVAILABLE = False
 
 
 class CPUBackend:
@@ -28,7 +33,9 @@ class CPUBackend:
     # TODO: should optimize when data is already a numpy.ndarray
     @classmethod
     def create(cls, data, dtype):
-        return np.array(data, dtype=dtype) if not isinstance(data, cp.ndarray) else cp.asnumpy(data)
+        if CUPY_AVAILABLE and isinstance(data, cp.ndarray):
+            return cp.asnumpy(data)
+        return np.array(data, dtype=dtype)
 
     @classmethod
     def zeros(cls, shape, dtype):
