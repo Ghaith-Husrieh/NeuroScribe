@@ -1,13 +1,10 @@
-import numpy as np
-
-
 class Optimizer:
     def __init__(self, params):
         self.params = params
 
     def zero_grad(self):
         for param in self.params:
-            param.grad = np.zeros(param.grad.shape, param.grad.dtype)
+            param.grad.zero_()
 
     def step(self, *args): raise NotImplementedError
 
@@ -20,4 +17,4 @@ class SGD(Optimizer):
 
     def step(self):
         for param in self.params:
-            param.data -= self.lr * param.grad
+            param.data -= self.lr * param.grad.data

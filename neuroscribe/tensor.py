@@ -64,8 +64,7 @@ class Tensor:
     def grad(self):
         if self.requires_grad:
             if self._grad is None:
-                # TODO: Replace with zeros_like() when implemented
-                self._grad = self._backend.zeros(self.shape, dtype=self.dtype)
+                self._grad = Tensor.zeros(self.shape, dtype=self.dtype, requires_grad=False, device=self.device)
             return self._grad
         else:
             return None
@@ -73,6 +72,9 @@ class Tensor:
     @grad.setter
     def grad(self, value):
         self._grad = value
+
+    def zero_(self):
+        self.data = self._backend.zeros(self.shape, dtype=self.dtype)
 
     def backward(self):
         if not self.requires_grad:
@@ -91,7 +93,7 @@ class Tensor:
                 graph.append(tensor)
         build_graph(self)
 
-        self.grad = self._backend.ones(self.shape, dtype=self.dtype)  # TODO: Replace with ones_like() when implemented
+        self.grad = Tensor.ones(self.shape, dtype=self.dtype, requires_grad=False, device=self.device)
         for tensor in reversed(graph):
             tensor._grad_fn()
 
@@ -163,10 +165,10 @@ class Tensor:
         return [Tensor.create(t, dtype=self.dtype, requires_grad=self.requires_grad, device=self.device) for t in result]
 
     # ********** Tensor Operations **********
-    def _exec_op(self, _op, *inputs):
+    def _exec_op(self, _op, *inputs, reverse=False):
         inputs = [Tensor.create(input, dtype=self.dtype, requires_grad=self.requires_grad, device=self.device)
                   if not isinstance(input, Tensor) else input for input in inputs]
-        inputs = [self] + inputs
+        inputs = [self] + inputs if not reverse else inputs + [self]
 
         result_tensor = Tensor.create(_op(*inputs), dtype=inputs[0].dtype, requires_grad=False, device=self.device)
 
@@ -190,11 +192,17 @@ class Tensor:
     def square(self): return self._exec_op(self._backend.square())
 
     # ********** Binary Ops **********
-    def add(self, other): return self._exec_op(self._backend.add(), other)
-    def sub(self, other): return self._exec_op(self._backend.sub(), other)
-    def mul(self, other): return self._exec_op(self._backend.mul(), other)
-    def matmul(self, other): return self._exec_op(self._backend.matmul(), other)
+    def add(self, other, reverse=False): return self._exec_op(self._backend.add(), other, reverse=reverse)
+    def sub(self, other, reverse=False): return self._exec_op(self._backend.sub(), other, reverse=reverse)
+    def mul(self, other, reverse=False): return self._exec_op(self._backend.mul(), other, reverse=reverse)
+    def matmul(self, other, reverse=False): return self._exec_op(self._backend.matmul(), other, reverse=reverse)
 
     def __add__(self, other): return self.add(other)
     def __sub__(self, other): return self.sub(other)
     def __mul__(self, other): return self.mul(other)
+    def __matmul__(self, other): return self.matmul(other)
+
+    def __radd__(self, other): return self.add(other, reverse=True)
+    def __rsub__(self, other): return self.sub(other, reverse=True)
+    def __rmul__(self, other): return self.mul(other, reverse=True)
+    def __rmatmul__(self, other): return self.matmul(other, reverse=True)
