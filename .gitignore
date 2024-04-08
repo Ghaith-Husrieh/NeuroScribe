@@ -3,3 +3,6 @@
 
 # ignore __pycache__ dir
 __pycache__/
+
+# Ignore mac Ds files
+.DS_Store
