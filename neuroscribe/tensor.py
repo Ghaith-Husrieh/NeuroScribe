@@ -57,6 +57,10 @@ class Tensor:
         return self.data.size
 
     @property
+    def ndim(self):
+        return self.data.ndim
+
+    @property
     def strides(self):
         return self.data.strides
 
@@ -72,6 +76,10 @@ class Tensor:
     @grad.setter
     def grad(self, value):
         self._grad = value
+
+    @property
+    def T(self):
+        return self.transpose()
 
     def zero_(self):
         self.data = self._backend.zeros(self.shape, dtype=self.dtype)
