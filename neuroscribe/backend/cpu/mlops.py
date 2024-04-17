@@ -9,7 +9,7 @@ class ReLU(Function):
 
     def backward(self, result_tensor):
         (t1,) = result_tensor._prev
-        t1.grad.data += (result_tensor.data > 0) * result_tensor.grad.data
+        t1.grad.data = t1.grad.data + (result_tensor.data > 0) * result_tensor.grad.data
 
 
 class Mean(Function):
@@ -17,7 +17,7 @@ class Mean(Function):
 
     def backward(self, result_tensor):
         (t1,) = result_tensor._prev
-        t1.grad.data += result_tensor.grad.data / t1.data.size
+        t1.grad.data = t1.grad.data + result_tensor.grad.data / t1.data.size
 
 
 class Square(Function):
@@ -25,7 +25,7 @@ class Square(Function):
 
     def backward(self, result_tensor):
         (t1,) = result_tensor._prev
-        t1.grad.data += 2 * t1.data * result_tensor.grad.data
+        t1.grad.data = t1.grad.data + 2 * t1.data * result_tensor.grad.data
 
 
 # ********** Binary ops **********
@@ -34,8 +34,8 @@ class Add(Function):
 
     def backward(self, result_tensor):
         t1, t2 = result_tensor._prev
-        t1.grad.data += result_tensor.grad.data
-        t2.grad.data += result_tensor.grad.data
+        t1.grad.data = t1.grad.data + result_tensor.grad.data
+        t2.grad.data = t2.grad.data + result_tensor.grad.data
 
 
 class Sub(Function):
@@ -43,8 +43,8 @@ class Sub(Function):
 
     def backward(self, result_tensor):
         t1, t2 = result_tensor._prev
-        t1.grad.data += result_tensor.grad.data
-        t2.grad.data -= result_tensor.grad.data
+        t1.grad.data = t1.grad.data + result_tensor.grad.data
+        t2.grad.data = t2.grad.data - result_tensor.grad.data
 
 
 class Mul(Function):
@@ -52,8 +52,8 @@ class Mul(Function):
 
     def backward(self, result_tensor):
         t1, t2 = result_tensor._prev
-        t1.grad.data += t2.data * result_tensor.grad.data
-        t2.grad.data += t1.data * result_tensor.grad.data
+        t1.grad.data = t1.grad.data + t2.data * result_tensor.grad.data
+        t2.grad.data = t2.grad.data + t1.data * result_tensor.grad.data
 
 
 class MatMul(Function):
@@ -61,5 +61,5 @@ class MatMul(Function):
 
     def backward(self, result_tensor):
         t1, t2 = result_tensor._prev
-        t1.grad.data += np.matmul(result_tensor.grad.data, t2.data.T)
-        t2.grad.data += np.matmul(t1.data.T, result_tensor.grad.data)
+        t1.grad.data = t1.grad.data + np.matmul(result_tensor.grad.data, t2.data.T)
+        t2.grad.data = t2.grad.data + np.matmul(t1.data.T, result_tensor.grad.data)
