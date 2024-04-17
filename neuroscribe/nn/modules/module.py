@@ -31,9 +31,10 @@ class Module:
             if name in _parameters:
                 return _parameters[name]
         if '_modules' in self.__dict__:
-            modules = self.__dict__['_modules']
-            if name in modules:
-                return modules[name]
+            _modules = self.__dict__['_modules']
+            if name in _modules:
+                return _modules[name]
+        raise AttributeError(f"'{type(self).__name__}' object has no attribute '{name}'")
 
     def __call__(self, *input):
         return self.forward(*input)
