@@ -41,6 +41,10 @@ class CUDABackend:
     def randn(cls, *shape, dtype):
         return cp.random.randn(*shape).astype(dtype)
 
+    @classmethod
+    def empty(cls, *shape, dtype):
+        return cp.empty(*shape, dtype=dtype)
+
     # ********** Shape Manipulation Methods **********
     @classmethod
     def reshape(cls, data, new_shape):

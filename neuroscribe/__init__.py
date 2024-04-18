@@ -1,6 +1,6 @@
 from neuroscribe.tensor import Tensor
 
-__all__ = ['tensor', 'zeros', 'ones', 'randn']
+__all__ = ['tensor', 'zeros', 'ones', 'randn', 'empty']
 
 
 def tensor(data, dtype='float32', requires_grad=False, device='cpu'):
@@ -17,3 +17,7 @@ def ones(shape, dtype='float32', requires_grad=False, device='cpu'):
 
 def randn(*shape, dtype='float32', requires_grad=False, device='cpu'):
     return Tensor.randn(*shape, dtype=dtype, requires_grad=requires_grad, device=device)
+
+
+def empty(*shape, dtype='float32', requires_grad=False, device='cpu'):
+    return Tensor.empty(*shape, dtype=dtype, requires_grad=requires_grad, device=device)

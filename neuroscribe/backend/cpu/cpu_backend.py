@@ -49,6 +49,10 @@ class CPUBackend:
     def randn(cls, *shape, dtype):
         return np.random.randn(*shape).astype(dtype)
 
+    @classmethod
+    def empty(cls, *shape, dtype):
+        return np.empty(*shape, dtype=dtype)
+
     # ********** Shape Manipulation Methods **********
     @classmethod
     def reshape(cls, data, new_shape):

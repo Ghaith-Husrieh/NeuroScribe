@@ -43,6 +43,10 @@ class MPSBackend:
         key = jax.random.PRNGKey(0)
         return jax.random.normal(key, shape).astype(dtype)
 
+    @classmethod
+    def empty(cls, *shape, dtype):
+        raise NotImplementedError(f'Tensor.empty not yet supported on {cls.device}')
+
     # ********** Shape Manipulation Methods **********
     @classmethod
     def reshape(cls, data, new_shape):
@@ -74,7 +78,7 @@ class MPSBackend:
     @staticmethod
     def add():
         return mlops.Add()
-    
+
     @staticmethod
     def sub():
         return mlops.Sub()
