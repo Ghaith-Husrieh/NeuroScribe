@@ -23,6 +23,14 @@ class CUDABackend:
     def shallow_copy(cls, data):
         return data.view()
 
+    @classmethod
+    def normal_(cls, mean, standard_deviation, shape):
+        return cp.random.normal(mean, standard_deviation, shape)
+
+    @classmethod
+    def uniform_(cls, lower_bound, upper_bound, shape):
+        return cp.random.uniform(lower_bound, upper_bound, shape)
+
     # ********** Creation Methods **********
     # TODO: should optimize when data is already a cupy.ndarray
     @classmethod

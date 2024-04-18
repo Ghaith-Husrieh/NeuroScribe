@@ -81,6 +81,12 @@ class Tensor:
     def T(self):
         return self.transpose()
 
+    def normal_(self, mean, standard_deviation):
+        self.data = self._backend.normal_(mean, standard_deviation, self.shape)
+
+    def uniform_(self, lower_bound, upper_bound):
+        self.data = self._backend.uniform_(lower_bound, upper_bound, self.shape)
+
     def zero_(self):
         self.data = self._backend.zeros(self.shape, dtype=self.dtype)
 

@@ -24,6 +24,14 @@ class MPSBackend:
     def shallow_copy(cls, data):
         return data.view()
 
+    @classmethod
+    def normal_(cls, mean, standard_deviation, shape):
+        raise NotImplementedError(f'Tensor.normal_ not yet supported on {cls.device}')
+
+    @classmethod
+    def uniform_(cls, lower_bound, upper_bound, shape):
+        raise NotImplementedError(f'Tensor.uniform_ not yet supported on {cls.device}')
+
     # ********** Creation Methods **********
     # TODO: should optimize when data is already a jax.ndarray
     @classmethod

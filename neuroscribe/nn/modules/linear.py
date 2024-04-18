@@ -1,5 +1,8 @@
+import math
+
 from neuroscribe.tensor import Tensor
 
+from .. import init
 from .module import Module
 
 
@@ -8,8 +11,16 @@ class Linear(Module):
         super().__init__()
         self.in_features = in_features
         self.out_features = out_features
-        self.weight = Tensor.randn(out_features, in_features)
-        self.bias = Tensor.randn(out_features) if bias else None
+        self.weight = Tensor.empty((out_features, in_features))
+        self.bias = Tensor.empty(out_features) if bias else None
+        self.init_parameters()
+
+    def init_parameters(self):
+        init.kaiming_uniform(self.weight, a=math.sqrt(5))
+        if self.bias is not None:
+            fan_in = init.calculate_correct_fan(self.weight, mode='fan_in')
+            bound = 1 / math.sqrt(fan_in) if fan_in > 0 else 0
+            self.bias.uniform_(-bound, bound)
 
     def forward(self, x):
         if not isinstance(x, Tensor):

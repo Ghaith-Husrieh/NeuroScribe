@@ -29,6 +29,14 @@ class CPUBackend:
     def shallow_copy(cls, data):
         return data.view()
 
+    @classmethod
+    def normal_(cls, mean, standard_deviation, shape):
+        return np.random.normal(mean, standard_deviation, shape)
+
+    @classmethod
+    def uniform_(cls, lower_bound, upper_bound, shape):
+        return np.random.uniform(lower_bound, upper_bound, shape)
+
     # ********** Creation Methods **********
     # TODO: should optimize when data is already a numpy.ndarray
     @classmethod
