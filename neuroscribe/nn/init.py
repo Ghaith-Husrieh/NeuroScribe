@@ -16,8 +16,8 @@ def calculate_correct_fan(tensor, mode):
     dimensions = tensor.ndim
     if dimensions < 2:
         raise ValueError("Fan in and fan out can not be computed for tensor with fewer than 2 dimensions")
-    fan_in = tensor.shape[1]
-    fan_out = tensor.shape[0]
+    fan_in = tensor.shape[0]
+    fan_out = tensor.shape[1]
     if dimensions > 2:
         ...  # TODO: Handle the case when tensor dims > 2
     if mode == 'fan_in':

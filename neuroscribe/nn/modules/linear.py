@@ -11,7 +11,7 @@ class Linear(Module):
         super().__init__()
         self.in_features = in_features
         self.out_features = out_features
-        self.weight = Tensor.empty((out_features, in_features))
+        self.weight = Tensor.empty((in_features, out_features))
         self.bias = Tensor.empty(out_features) if bias else None
         self.init_parameters()
 
@@ -27,5 +27,5 @@ class Linear(Module):
             x = Tensor.create(x, requires_grad=self._training, device=self._device)
 
         if self.bias is not None:
-            return x @ self.weight.T + self.bias
-        return x @ self.weight.T
+            return x @ self.weight + self.bias
+        return x @ self.weight
