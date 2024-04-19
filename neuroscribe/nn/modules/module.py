@@ -1,6 +1,23 @@
+import pickle
 from collections import OrderedDict
 
 from neuroscribe.tensor import Tensor
+
+
+def save(model, filename):
+    if not isinstance(model, Module):
+        raise TypeError(f"Cannot save object of type '{type(model).__name__}', expected 'Module'")
+    filename = filename + '.nsm' if not filename.endswith('.nsm') else filename
+    with open(filename, "wb") as f:
+        pickle.dump(model, f)
+    print(f"Module saved to '{filename}'")
+
+
+def load(filename):
+    filename = filename + '.nsm' if not filename.endswith('.nsm') else filename
+    with open(filename, "rb") as f:
+        module = pickle.load(f)
+    return module
 
 
 class Module:

@@ -1,3 +1,4 @@
+import types
 from functools import partial
 
 
@@ -113,6 +114,17 @@ class Tensor:
 
     def __repr__(self):
         return f"Tensor({self.data}, dtype={self.dtype})"
+
+    def __getstate__(self):
+        state = self.__dict__.copy()
+        if isinstance(state['_grad_fn'], types.LambdaType):
+            state['_grad_fn'] = None
+        return state
+
+    def __setstate__(self, state):
+        self.__dict__.update(state)
+        if self._grad_fn is None:
+            self._grad_fn = lambda: None
 
     def is_contiguous(self):
         return self._backend.is_contiguous(self.data)

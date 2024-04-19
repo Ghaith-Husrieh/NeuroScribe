@@ -1,6 +1,7 @@
+from neuroscribe.nn.modules.module import load, save
 from neuroscribe.tensor import Tensor
 
-__all__ = ['tensor', 'zeros', 'ones', 'randn', 'empty']
+__all__ = ['tensor', 'zeros', 'ones', 'randn', 'empty', 'save', 'load']
 
 
 def tensor(data, dtype='float32', requires_grad=False, device='cpu'):
