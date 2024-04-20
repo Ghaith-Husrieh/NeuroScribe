@@ -2,6 +2,17 @@
 
 NeuroScribe a lightweight deep learning framework.
 
+## Installation
+
+```
+pip install neuro-scribe
+```
+
+**Notes:**
+
+- If you want CUDA support for GPU acceleration, please ensure that you have CUDA Toolkit version 12 or higher installed on your device.<br> You can download CUDA Toolkit from the official NVIDIA website: [CUDA Toolkit Downloads](https://developer.nvidia.com/cuda-downloads)
+- If you're installing NeuroScribe on an Apple Silicon Mac, NeuroScribe will automatically detect the architecture and install additional dependencies for Metal Performance Shaders (MPS) support.
+
 ## Quick Start Example
 
 This example demonstrates how to use Neuroscribe in a way that closely resembles PyTorch syntax and conventions. By following PyTorch's familiar patterns, users can easily integrate Neuroscribe into their existing deep learning workflows without significant adjustments.
@@ -47,15 +58,6 @@ Neuroscribe currently supports the following accelerators:
 - MPS (Metal Performance Shaders)
 
 We plan to add support for additional accelerators to further enhance performance capabilities.
-
-## Naming Conventions and Guidelines:
-
-- **ClassNames** = PascalCase
-- **directories** = snake_case
-- **file_names** = snake_case
-- **variable_names** = snake_case
-- **function_names** = snake_case
-- **CONSTANTS** = SCREAMING_SNAKE_CASE
 
 ## Notes
 
