@@ -15,10 +15,12 @@ class MyModel(nn.Module):
     def __init__(self):
         super().__init__()
         self.l1 = nn.Linear(784, 128)
+        self.relu = nn.ReLU()
         self.l2 = nn.Linear(128, 10)
 
     def forward(self, x):
-        x = self.l1(x).relu()
+        x = self.l1(x)
+        x = self.relu(x)
         x = self.l2(x)
         return x
 
