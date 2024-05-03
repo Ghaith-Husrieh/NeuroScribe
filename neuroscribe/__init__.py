@@ -1,6 +1,8 @@
 from neuroscribe.nn.modules.module import load, save
 from neuroscribe.tensor import Tensor
 
+from .version import __git_revision__, __version__
+
 __all__ = ['tensor', 'zeros', 'ones', 'randn', 'empty', 'save', 'load']
 
 
