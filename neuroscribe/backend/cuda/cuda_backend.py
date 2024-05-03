@@ -42,8 +42,16 @@ class CUDABackend:
         return cp.zeros(shape, dtype=dtype)
 
     @classmethod
+    def zeros_like(cls, input, dtype):
+        return cp.zeros_like(input, dtype=dtype)
+
+    @classmethod
     def ones(cls, shape, dtype):
         return cp.ones(shape, dtype=dtype)
+
+    @classmethod
+    def ones_like(cls, input, dtype):
+        return cp.ones_like(input, dtype=dtype)
 
     @classmethod
     def randn(cls, *shape, dtype):

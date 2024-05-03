@@ -10,11 +10,11 @@ class MPSBackend:
 
     @classmethod
     def is_contiguous(cls, data):
-        pass
+        raise NotImplementedError(f'Tensor.is_contiguous not yet supported on {cls.device}')
 
     @classmethod
     def make_contiguous(cls, data):
-        pass
+        raise NotImplementedError(f'Tensor.make_contiguous not yet supported on {cls.device}')
 
     @classmethod
     def deep_copy(cls, data):
@@ -43,8 +43,16 @@ class MPSBackend:
         return jnp.zeros(shape, dtype=dtype)
 
     @classmethod
+    def zeros_like(cls, input, dtype):
+        raise NotImplementedError(f'Tensor.zeros_like not yet supported on {cls.device}')
+
+    @classmethod
     def ones(cls, shape, dtype):
         return jnp.ones(shape, dtype=dtype)
+
+    @classmethod
+    def ones_like(cls, input, dtype):
+        raise NotImplementedError(f'Tensor.ones_like not yet supported on {cls.device}')
 
     @classmethod
     def randn(cls, *shape, dtype):

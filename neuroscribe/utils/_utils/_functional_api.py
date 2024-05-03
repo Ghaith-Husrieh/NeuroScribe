@@ -1,12 +1,14 @@
 from neuroscribe.tensor import Tensor
 
-__all__ = ['tensor', 'zeros', 'ones', 'randn', 'empty',
+__all__ = ['tensor', 'zeros', 'zeros_like', 'ones', 'ones_like', 'randn', 'empty',
            'add', 'sub', 'mul', 'matmul', 'relu', 'mean', 'square']
 
 # Tensor Static Methods
 tensor = Tensor.create
 zeros = Tensor.zeros
+zeros_like = Tensor.zeros_like
 ones = Tensor.ones
+ones_like = Tensor.ones_like
 randn = Tensor.randn
 empty = Tensor.empty
 

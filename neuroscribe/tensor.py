@@ -140,6 +140,7 @@ class Tensor:
     def shallow_copy(self):
         return Tensor(self._backend.shallow_copy(self.data), backend=self._backend, requires_grad=self.requires_grad)
 
+    # ********** Helper Methods **********
     @staticmethod
     def _get_backend(device):
         if device not in Tensor._supported_backends:
@@ -147,6 +148,13 @@ class Tensor:
         if device not in Tensor._backends:
             raise ValueError(f"NeuroScribe is not installed with support for {device.upper()} devices.")
         return Tensor._backends[device]
+
+    @staticmethod
+    def _prepare_like_attributes(input, dtype, requires_grad, device):
+        backend = Tensor._get_backend(device) if device is not None else input._backend
+        dtype = dtype if dtype is not None else input.dtype
+        requires_grad = requires_grad if requires_grad is not None else input.requires_grad
+        return backend, dtype, requires_grad
 
     # ********** Creation Methods **********
     @staticmethod
@@ -160,9 +168,19 @@ class Tensor:
         return Tensor(backend.zeros(shape, dtype=dtype), backend=backend, requires_grad=requires_grad)
 
     @staticmethod
+    def zeros_like(input, dtype=None, requires_grad=None, device=None):
+        backend, dtype, requires_grad = Tensor._prepare_like_attributes(input, dtype, requires_grad, device)
+        return Tensor(backend.zeros_like(input.data, dtype=dtype), backend=backend, requires_grad=requires_grad)
+
+    @staticmethod
     def ones(shape, dtype='float32', requires_grad=False, device='cpu'):
         backend = Tensor._get_backend(device)
         return Tensor(backend.ones(shape, dtype=dtype), backend=backend, requires_grad=requires_grad)
+
+    @staticmethod
+    def ones_like(input, dtype=None, requires_grad=None, device=None):
+        backend, dtype, requires_grad = Tensor._prepare_like_attributes(input, dtype, requires_grad, device)
+        return Tensor(backend.ones_like(input.data, dtype=dtype), backend=backend, requires_grad=requires_grad)
 
     @staticmethod
     def randn(*shape, dtype='float32', requires_grad=False, device='cpu'):
