@@ -27,6 +27,8 @@ try:
 except ImportError:
     pass
 
+from neuroscribe.utils._utils._core import _align_gradient_shape
+
 
 class Tensor:
 
@@ -111,6 +113,8 @@ class Tensor:
         self.grad = Tensor.ones(self.shape, dtype=self.dtype, requires_grad=False, device=self.device)
         for tensor in reversed(graph):
             tensor._grad_fn()
+        for tensor in reversed(graph):
+            _align_gradient_shape(tensor)
 
     def __repr__(self):
         return f"Tensor({self.data}, dtype={self.dtype})"
