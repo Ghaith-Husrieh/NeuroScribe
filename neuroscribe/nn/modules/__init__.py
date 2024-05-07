@@ -1,5 +1,5 @@
-from .activation import ReLU
+from .activation import LeakyReLU, ReLU
 from .linear import Linear
 from .module import Module
 
-__all__ = ['Linear', 'Module', 'ReLU']
+__all__ = ['Linear', 'Module', 'ReLU', 'LeakyReLU']

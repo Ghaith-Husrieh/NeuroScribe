@@ -81,6 +81,10 @@ class MPSBackend:
     def relu():
         return mlops.ReLU()
 
+    @staticmethod
+    def leaky_relu(negative_slope):
+        raise NotImplementedError(f'Tensor.leaky_relu not yet supported on {MPSBackend.device}')
+
     # ********** Unary ops **********
     @staticmethod
     def mean():

@@ -79,6 +79,10 @@ class CUDABackend:
     def relu():
         return mlops.ReLU()
 
+    @staticmethod
+    def leaky_relu(negative_slope):
+        return mlops.LeakyReLU(negative_slope)
+
     # ********** Unary ops **********
     @staticmethod
     def mean():

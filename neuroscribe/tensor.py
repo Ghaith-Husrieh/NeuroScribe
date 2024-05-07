@@ -237,6 +237,7 @@ class Tensor:
 
     # ********** Activation Functions **********
     def relu(self): return self._exec_op(self._backend.relu())
+    def leaky_relu(self, negative_slope=0.01): return self._exec_op(self._backend.leaky_relu(negative_slope))
 
     # ********** Reduction Ops **********
     def mean(self): return self._exec_op(self._backend.mean())
