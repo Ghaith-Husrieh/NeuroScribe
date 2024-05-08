@@ -1,5 +1,6 @@
 import math
 
+import neuroscribe.nn.functional as F
 from neuroscribe.tensor import Tensor
 
 from .. import init
@@ -22,10 +23,8 @@ class Linear(Module):
             bound = 1 / math.sqrt(fan_in) if fan_in > 0 else 0
             self.bias.uniform_(-bound, bound)
 
-    def forward(self, x):
-        if not isinstance(x, Tensor):
-            x = Tensor.create(x, requires_grad=self._training, device=self._device)
+    def forward(self, input):
+        if not isinstance(input, Tensor):
+            input = Tensor.create(input, requires_grad=self._training, device=self._device)
 
-        if self.bias is not None:
-            return x @ self.weight + self.bias
-        return x @ self.weight
+        return F.linear(input, self.weight, self.bias)

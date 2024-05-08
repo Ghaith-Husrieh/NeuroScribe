@@ -10,7 +10,6 @@ class Function:
     def backward(self, result_tensor): raise RuntimeError(f"backward not implemented for {type(self)}")
 
 
-import neuroscribe.loss as loss
 from neuroscribe.backend.cpu.cpu_backend import CPUBackend
 
 available_backends = {'cpu': CPUBackend}
@@ -231,9 +230,6 @@ class Tensor:
             result_tensor._prev.extend(inputs)
 
         return result_tensor
-
-    # ********** Loss Functions **********
-    def mse_loss(self, other): return loss.mse_loss(self, other)
 
     # ********** Activation Functions **********
     def relu(self): return self._exec_op(self._backend.relu())
