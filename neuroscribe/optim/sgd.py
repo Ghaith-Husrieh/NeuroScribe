@@ -20,5 +20,5 @@ class SGD(Optimizer):
                 param.data = param.data - self.lr * param.grad.data
         else:
             for i, param in enumerate(self.params):
-                self.velocities[i].data = self.momentum * self.velocities[i].data - self.lr * param.grad.data
-                param.data = param.data + self.velocities[i].data
+                self.velocities[i].data = self.momentum * self.velocities[i].data + param.grad.data
+                param.data = param.data - self.lr * self.velocities[i].data
