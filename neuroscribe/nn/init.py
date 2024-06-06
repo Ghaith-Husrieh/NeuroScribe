@@ -12,12 +12,12 @@ def calculate_gain(nonlinearity, a):
         raise ValueError(f"Unsupported nonlinearity '{nonlinearity}'")
 
 
-def calculate_correct_fan(tensor, mode):
+def calculate_correct_fan(tensor, mode, *, _reverse=False):
     dimensions = tensor.ndim
     if dimensions < 2:
         raise ValueError("Fan in and fan out can not be computed for tensor with fewer than 2 dimensions")
-    num_in_feature_maps = tensor.shape[0]
-    num_out_feature_maps = tensor.shape[1]
+    num_in_feature_maps = tensor.shape[0] if _reverse else tensor.shape[1]
+    num_out_feature_maps = tensor.shape[1] if _reverse else tensor.shape[0]
     receptive_field_size = 1
     if dimensions > 2:
         receptive_field_size = math.prod(tensor.shape[2:])
@@ -29,16 +29,16 @@ def calculate_correct_fan(tensor, mode):
         raise ValueError(f"Unsupported mode '{mode}', please use one of ['fan_in', 'fan_out']")
 
 
-def kaiming_normal(tensor, a=0, mode='fan_in', nonlinearity='leaky_relu'):
-    fan = calculate_correct_fan(tensor, mode)
+def kaiming_normal(tensor, a=0, mode='fan_in', nonlinearity='leaky_relu', *, _reverse=False):
+    fan = calculate_correct_fan(tensor, mode, _reverse=_reverse)
     gain = calculate_gain(nonlinearity, a)
     std = gain / math.sqrt(fan)
 
     tensor.normal_(0, std)
 
 
-def kaiming_uniform(tensor, a=0, mode='fan_in', nonlinearity='leaky_relu'):
-    fan = calculate_correct_fan(tensor, mode)
+def kaiming_uniform(tensor, a=0, mode='fan_in', nonlinearity='leaky_relu', *, _reverse=False):
+    fan = calculate_correct_fan(tensor, mode, _reverse=_reverse)
     gain = calculate_gain(nonlinearity, a)
     std = gain / math.sqrt(fan)
     bound = math.sqrt(3.0) * std

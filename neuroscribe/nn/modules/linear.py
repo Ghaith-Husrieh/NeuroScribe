@@ -17,9 +17,9 @@ class Linear(Module):
         self.init_parameters()
 
     def init_parameters(self):
-        init.kaiming_uniform(self.weight, a=math.sqrt(5))
+        init.kaiming_uniform(self.weight, a=math.sqrt(5), _reverse=True)
         if self.bias is not None:
-            fan_in = init.calculate_correct_fan(self.weight, mode='fan_in')
+            fan_in = init.calculate_correct_fan(self.weight, mode='fan_in', _reverse=True)
             bound = 1 / math.sqrt(fan_in) if fan_in > 0 else 0
             self.bias.uniform_(-bound, bound)
 
