@@ -1,24 +1,29 @@
-import jax
-import jax.numpy as jnp
+import numpy as np
 
-import neuroscribe.backend.mps.mlops as mlops
+import neuroscribe.core._tensor_lib.backend.cpu.mlops as mlops
+
+try:
+    import cupy as cp
+    CUPY_AVAILABLE = True
+except ImportError:
+    CUPY_AVAILABLE = False
 
 
-class MPSBackend:
+class CPUBackend:
 
-    device = 'mps'
+    device = 'cpu'
 
     @classmethod
     def is_contiguous(cls, data):
-        raise NotImplementedError(f'Tensor.is_contiguous not yet supported on {cls.device}')
+        return data.flags['C_CONTIGUOUS']
 
     @classmethod
     def make_contiguous(cls, data):
-        raise NotImplementedError(f'Tensor.make_contiguous not yet supported on {cls.device}')
+        return np.ascontiguousarray(data)
 
     @classmethod
     def deep_copy(cls, data):
-        return jnp.copy(data, order='C')
+        return data.copy(order='C')
 
     @classmethod
     def shallow_copy(cls, data):
@@ -26,53 +31,59 @@ class MPSBackend:
 
     @classmethod
     def normal_(cls, mean, standard_deviation, shape):
-        key = jax.random.PRNGKey(0)
-        return jax.random.normal(key, shape) * standard_deviation + mean
-    
+        return np.random.normal(mean, standard_deviation, shape)
+
     @classmethod
     def uniform_(cls, lower_bound, upper_bound, shape):
-        key = jax.random.PRNGKey(0)
-        return jax.random.uniform(key, shape, minval=lower_bound, maxval=upper_bound)
+        return np.random.uniform(lower_bound, upper_bound, shape)
 
     @staticmethod
     def arange(start, stop, step, dtype):
-        return jnp.arange(start, stop, step, dtype=dtype)
-    
+        return np.arange(start, stop, step, dtype=dtype)
+
     @staticmethod
     def shuffle_(data):
-        key = jax.random.PRNGKey(10)
-        return jax.random.permutation(key, data)
+        np.random.shuffle(data)
+
+    @staticmethod
+    def einsum(subscripts, *inputs):
+        return np.einsum(subscripts, *inputs)
+
+    @staticmethod
+    def pad(input, pad, mode, constant_values):
+        return np.pad(input, pad, mode, constant_values=constant_values)
 
     # ********** Creation Methods **********
-    # TODO: should optimize when data is already a jax.ndarray
+    # TODO: should optimize when data is already a numpy.ndarray
     @classmethod
     def create(cls, data, dtype):
-        return jnp.array(data, dtype=dtype)
+        if CUPY_AVAILABLE and isinstance(data, cp.ndarray):
+            return cp.asnumpy(data)
+        return np.array(data, dtype=dtype)
 
     @classmethod
     def zeros(cls, shape, dtype):
-        return jnp.zeros(shape, dtype=dtype)
+        return np.zeros(shape, dtype=dtype)
 
     @classmethod
     def zeros_like(cls, input, dtype):
-        return jnp.zeros_like(input, dtype=dtype)
+        return np.zeros_like(input, dtype=dtype)
 
     @classmethod
     def ones(cls, shape, dtype):
-        return jnp.ones(shape, dtype=dtype)
+        return np.ones(shape, dtype=dtype)
 
     @classmethod
     def ones_like(cls, input, dtype):
-        return jnp.ones_like(input, dtype=dtype)
+        return np.ones_like(input, dtype=dtype)
 
     @classmethod
     def randn(cls, *shape, dtype):
-        key = jax.random.PRNGKey(0)
-        return jax.random.normal(key, shape).astype(dtype)
+        return np.random.randn(*shape).astype(dtype)
 
     @classmethod
     def empty(cls, *shape, dtype):
-        return jnp.empty(shape, dtype=dtype)
+        return np.empty(*shape, dtype=dtype)
 
     # ********** Shape Manipulation Methods **********
     @classmethod
@@ -81,11 +92,11 @@ class MPSBackend:
 
     @classmethod
     def transpose(cls, data, axes):
-        return jnp.transpose(data)
+        return data.transpose(axes)
 
     @classmethod
     def split(cls, data, indices_or_sections, axis):
-        return jnp.split(data, indices_or_sections, axis)
+        return np.split(data, indices_or_sections, axis)
 
     # ********** Activation Functions **********
     @staticmethod

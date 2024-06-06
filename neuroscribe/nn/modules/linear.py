@@ -1,7 +1,7 @@
 import math
 
 import neuroscribe.nn.functional as F
-from neuroscribe.tensor import Tensor
+from neuroscribe.core._tensor_lib._tensor import Tensor
 
 from .. import init
 from .module import Module

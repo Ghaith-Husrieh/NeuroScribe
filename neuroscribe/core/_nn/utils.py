@@ -1,6 +1,7 @@
-# TODO: This file should be deleted
 from collections.abc import Iterable
 from itertools import repeat
+
+import numpy as np
 
 
 def _ntuple(n, name="parse"):
@@ -107,4 +108,4 @@ def _sliding_window_view(input, window_shape, step_shape, conv_dim):
             input.strides[4]                    # stride to move to the next element within the window along width
         )
 
-    return np.lib.stride_tricks.as_strided(input, shape=new_shape, strides=new_strides, writeable=False)
+    return np.lib.stride_tricks.as_strided(input.data, shape=new_shape, strides=new_strides, writeable=False)

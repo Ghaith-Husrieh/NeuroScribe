@@ -1,10 +1,8 @@
 import os
 
-from neuroscribe.utils._utils._data import (
-    _read_delimited_data,
-    _read_ubyte_data,
-    _read_ubyte_label_data,
-)
+from neuroscribe.core._utils._data import (_read_delimited_data,
+                                           _read_ubyte_data,
+                                           _read_ubyte_label_data)
 
 
 def read_data(file_path, chunk_size=1000):

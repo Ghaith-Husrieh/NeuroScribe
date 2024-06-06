@@ -1,4 +1,4 @@
-from neuroscribe.tensor import Tensor
+from neuroscribe.core._tensor_lib._tensor import Tensor
 
 from .optimizer import Optimizer
 

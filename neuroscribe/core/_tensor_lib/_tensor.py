@@ -10,23 +10,24 @@ class Function:
     def backward(self, result_tensor): raise RuntimeError(f"backward not implemented for {type(self)}")
 
 
-from neuroscribe.backend.cpu.cpu_backend import CPUBackend
+from neuroscribe.core._tensor_lib.backend.cpu.cpu_backend import CPUBackend
 
 available_backends = {'cpu': CPUBackend}
 
 try:
-    from neuroscribe.backend.cuda.cuda_backend import CUDABackend
+    from neuroscribe.core._tensor_lib.backend.cuda.cuda_backend import \
+        CUDABackend
     available_backends['cuda'] = CUDABackend
 except ImportError:
     pass
 
 try:
-    from neuroscribe.backend.mps.mps_backend import MPSBackend
+    from neuroscribe.core._tensor_lib.backend.mps.mps_backend import MPSBackend
     available_backends['mps'] = MPSBackend
 except ImportError:
     pass
 
-from neuroscribe.utils._utils._core import _align_gradient_shape
+from neuroscribe.core._utils._core import _align_gradient_shape
 
 
 class Tensor:
@@ -143,6 +144,24 @@ class Tensor:
     def shallow_copy(self):
         return Tensor(self._backend.shallow_copy(self.data), backend=self._backend, requires_grad=self.requires_grad)
 
+    @staticmethod
+    def arange(start, stop=None, step=1, dtype='uint16', device='cpu'):
+        backend = Tensor._get_backend(device)
+        return Tensor(backend.arange(start, stop, step, dtype), backend=backend, requires_grad=False)
+
+    @staticmethod
+    def shuffle_(tensor):
+        if not isinstance(tensor, Tensor):
+            raise TypeError("The shuffle method expects a Tensor object.")
+        if tensor.device == 'mps':
+            tensor.data = tensor._backend.shuffle_(tensor.data)
+        else:
+            tensor._backend.shuffle_(tensor.data)
+
+    @staticmethod
+    def pad(input, pad, mode, *, constant_values):
+        return Tensor(input._backend.pad(input.data, pad, mode, constant_values), backend=input._backend, requires_grad=input.requires_grad)
+
     # ********** Helper Methods **********
     @staticmethod
     def _get_backend(device):
@@ -158,22 +177,6 @@ class Tensor:
         dtype = dtype if dtype is not None else input.dtype
         requires_grad = requires_grad if requires_grad is not None else input.requires_grad
         return backend, dtype, requires_grad
-
-    # TODO: Needs Refactor
-    @staticmethod
-    def arange(start, stop=None, step=1, dtype='uint16', device='cpu'):
-        backend = Tensor._get_backend(device)
-        return Tensor(backend.arange(start, stop, step, dtype), backend=backend, requires_grad=False)
-
-    # TODO: Needs Refactor
-    @staticmethod
-    def shuffle_(tensor):
-        if not isinstance(tensor, Tensor):
-            raise TypeError("The shuffle method expects a Tensor object.")
-        if tensor.device == 'mps':
-            tensor.data = tensor._backend.shuffle_(tensor.data)
-        else:
-            tensor._backend.shuffle_(tensor.data)
 
     # ********** Creation Methods **********
     @staticmethod
@@ -216,6 +219,9 @@ class Tensor:
             return self
         return Tensor.create(self.data, dtype=self.dtype, requires_grad=self.requires_grad, device=device)
 
+    def asnumpy(self):
+        return self.to('cpu').data
+
     def astype(self, dtype):
         if self.dtype == dtype:
             return self
@@ -238,7 +244,7 @@ class Tensor:
                   if not isinstance(input, Tensor) else input for input in inputs]
         inputs = [self] + inputs if not reverse else inputs + [self]
 
-        result_tensor = Tensor.create(_op(*inputs), dtype=inputs[0].dtype, requires_grad=False, device=self.device)
+        result_tensor = Tensor.create(_op(*inputs), dtype=self.dtype, requires_grad=False, device=self.device)
 
         if any(input.requires_grad for input in inputs):
             result_tensor.requires_grad = True

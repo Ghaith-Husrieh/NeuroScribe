@@ -1,7 +1,7 @@
 import pickle
 from collections import OrderedDict
 
-from neuroscribe.tensor import Tensor
+from neuroscribe.core._tensor_lib._tensor import Tensor
 
 
 def save(model, filename):

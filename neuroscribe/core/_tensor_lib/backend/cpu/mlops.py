@@ -1,31 +1,31 @@
-import jax
-import jax.numpy as jnp
+import numpy as np
 
-from neuroscribe.tensor import Function
+from neuroscribe.core._tensor_lib._tensor import Function
 
 
 # ********** Unary ops **********
 class ReLU(Function):
-    def forward(self, t1): return jnp.maximum(0, t1.data)
+    def forward(self, t1): return np.maximum(0, t1.data)
 
     def backward(self, result_tensor):
         (t1,) = result_tensor._prev
         t1.grad.data = t1.grad.data + (result_tensor.data > 0) * result_tensor.grad.data
+
 
 class LeakyReLU(Function):
     def __init__(self, negative_slope):
         self.negative_slope = negative_slope
 
     def forward(self, t1):
-        return jnp.maximum(self.negative_slope * t1.data, t1.data)
+        return np.maximum(self.negative_slope * t1.data, t1.data)
 
     def backward(self, result_tensor):
         (t1,) = result_tensor._prev
-        t1.grad.data = t1.grad.data + jnp.where(t1.data > 0, 1, self.negative_slope) * result_tensor.grad.data
+        t1.grad.data = t1.grad.data + np.where(t1.data > 0, 1, self.negative_slope) * result_tensor.grad.data
 
 
 class Mean(Function):
-    def forward(self, t1): return jnp.mean(t1.data)
+    def forward(self, t1): return np.mean(t1.data)
 
     def backward(self, result_tensor):
         (t1,) = result_tensor._prev
@@ -33,7 +33,7 @@ class Mean(Function):
 
 
 class Square(Function):
-    def forward(self, t1): return jnp.square(t1.data)
+    def forward(self, t1): return np.square(t1.data)
 
     def backward(self, result_tensor):
         (t1,) = result_tensor._prev
@@ -69,9 +69,9 @@ class Mul(Function):
 
 
 class MatMul(Function):
-    def forward(self, t1, t2): return jnp.matmul(t1.data, t2.data)
+    def forward(self, t1, t2): return np.matmul(t1.data, t2.data)
 
     def backward(self, result_tensor):
         t1, t2 = result_tensor._prev
-        t1.grad.data = t1.grad.data + jnp.matmul(result_tensor.grad.data, t2.data.T)
-        t2.grad.data = t2.grad.data + jnp.matmul(t1.data.T, result_tensor.grad.data)
+        t1.grad.data = t1.grad.data + np.matmul(result_tensor.grad.data, t2.data.T)
+        t2.grad.data = t2.grad.data + np.matmul(t1.data.T, result_tensor.grad.data)

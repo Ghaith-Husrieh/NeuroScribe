@@ -1,7 +1,7 @@
-from neuroscribe.tensor import Tensor
+from neuroscribe.core._tensor_lib._tensor import Tensor
 
 __all__ = ['tensor', 'arange', 'shuffle_', 'zeros', 'zeros_like', 'ones', 'ones_like', 'randn', 'empty',
-           'add', 'sub', 'mul', 'matmul', 'relu', 'leaky_relu', 'mean', 'square']
+           'add', 'sub', 'mul', 'matmul', 'relu', 'leaky_relu', 'mean', 'square', 'pad']
 
 # Tensor Static Methods
 tensor = Tensor.create
@@ -13,6 +13,7 @@ ones = Tensor.ones
 ones_like = Tensor.ones_like
 randn = Tensor.randn
 empty = Tensor.empty
+pad = Tensor.pad
 
 
 # Tensor Instance Methods

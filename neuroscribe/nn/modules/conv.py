@@ -1,11 +1,11 @@
 import math
 
 import neuroscribe.nn.functional as F
-from neuroscribe.tensor import Tensor
+from neuroscribe.core._nn.utils import _pair, _single, _triple
+from neuroscribe.core._tensor_lib._tensor import Tensor
 
 from .. import init
 from .module import Module
-from .utils import _pair, _single, _triple
 
 
 class _ConvNd(Module):
@@ -57,27 +57,63 @@ class Conv1d(_ConvNd):
     def __init__(self, in_channels, out_channels, kernel_size, stride=1, padding=0, dilation=1, groups=1, padding_mode='zeros', bias=True):
         kernel_size = _single(kernel_size)
         stride = _single(stride)
-        padding = padding if isinstance(padding, str) else _single(padding)
+        padding = padding if isinstance(padding, str) else padding
         dilation = _single(dilation)
         super().__init__(in_channels, out_channels, kernel_size, stride, padding,
                          dilation, False, _single(0), groups, padding_mode, bias)
+
+    def _conv_forward(self, input, weight, bias):
+        if self.padding_mode != 'zeros':
+            raise NotImplementedError("Padding modes other than 'zeros' are not yet supported")
+
+        return F.conv1d(input, weight, bias, self.stride, self.padding, self.dilation, self.groups)
+
+    def forward(self, input):
+        if not isinstance(input, Tensor):
+            input = Tensor.create(input, requires_grad=self._training, device=self._device)
+
+        return self._conv_forward(input, self.weight, self.bias)
 
 
 class Conv2d(_ConvNd):
     def __init__(self, in_channels, out_channels, kernel_size, stride=1, padding=0, dilation=1, groups=1, padding_mode='zeros', bias=True):
         kernel_size = _pair(kernel_size)
         stride = _pair(stride)
-        padding = padding if isinstance(padding, str) else _pair(padding)
+        padding = padding if isinstance(padding, str) else padding
         dilation = _pair(dilation)
         super().__init__(in_channels, out_channels, kernel_size, stride, padding,
                          dilation, False, _pair(0), groups, padding_mode, bias)
+
+    def _conv_forward(self, input, weight, bias):
+        if self.padding_mode != 'zeros':
+            raise NotImplementedError("Padding modes other than 'zeros' are not yet supported")
+
+        return F.conv2d(input, weight, bias, self.stride, self.padding, self.dilation, self.groups)
+
+    def forward(self, input):
+        if not isinstance(input, Tensor):
+            input = Tensor.create(input, requires_grad=self._training, device=self._device)
+
+        return self._conv_forward(input, self.weight, self.bias)
 
 
 class Conv3d(_ConvNd):
     def __init__(self, in_channels, out_channels, kernel_size, stride=1, padding=0, dilation=1, groups=1, padding_mode='zeros', bias=True):
         kernel_size = _triple(kernel_size)
         stride = _triple(stride)
-        padding = padding if isinstance(padding, str) else _triple(padding)
+        padding = padding if isinstance(padding, str) else padding
         dilation = _triple(dilation)
         super().__init__(in_channels, out_channels, kernel_size, stride, padding,
                          dilation, False, _triple(0), groups, padding_mode, bias)
+
+    def _conv_forward(self, input, weight, bias):
+        if self.padding_mode != 'zeros':
+            raise NotImplementedError("Padding modes other than 'zeros' are not yet supported")
+
+        return F.conv3d(input, weight, bias, self.stride, self.padding, self.dilation, self.groups)
+
+    def forward(self, input):
+        if not isinstance(input, Tensor):
+            input = Tensor.create(input, requires_grad=self._training, device=self._device)
+
+        return self._conv_forward(input, self.weight, self.bias)

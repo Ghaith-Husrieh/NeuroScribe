@@ -4,7 +4,8 @@ from collections import OrderedDict
 import numpy as np
 
 import neuroscribe as ns
-from neuroscribe.utils._utils._data import _decompress_file, _request_file, _save_file
+from neuroscribe.core._utils._data import (_decompress_file, _request_file,
+                                           _save_file)
 from neuroscribe.utils.data.utils import read_data
 
 __all__ = ['Dataset', 'MNIST', 'FashionMNIST']

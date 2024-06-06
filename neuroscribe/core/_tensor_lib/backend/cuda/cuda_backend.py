@@ -1,6 +1,6 @@
 import cupy as cp
 
-import neuroscribe.backend.cuda.mlops as mlops
+import neuroscribe.core._tensor_lib.backend.cuda.mlops as mlops
 
 
 class CUDABackend:
@@ -38,6 +38,14 @@ class CUDABackend:
     @staticmethod
     def shuffle_(data):
         cp.random.shuffle(data)
+
+    @staticmethod
+    def einsum(subscripts, *inputs):
+        return cp.einsum(subscripts, *inputs)
+
+    @staticmethod
+    def pad(input, pad, mode, constant_values):
+        return cp.pad(input, pad, mode, constant_values=constant_values)
 
     # ********** Creation Methods **********
     # TODO: should optimize when data is already a cupy.ndarray
