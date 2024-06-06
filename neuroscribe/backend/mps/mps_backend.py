@@ -26,11 +26,22 @@ class MPSBackend:
 
     @classmethod
     def normal_(cls, mean, standard_deviation, shape):
-        raise NotImplementedError(f'Tensor.normal_ not yet supported on {cls.device}')
-
+        key = jax.random.PRNGKey(0)
+        return jax.random.normal(key, shape) * standard_deviation + mean
+    
     @classmethod
     def uniform_(cls, lower_bound, upper_bound, shape):
-        raise NotImplementedError(f'Tensor.uniform_ not yet supported on {cls.device}')
+        key = jax.random.PRNGKey(0)
+        return jax.random.uniform(key, shape, minval=lower_bound, maxval=upper_bound)
+
+    @staticmethod
+    def arange(start, stop, step, dtype):
+        return jnp.arange(start, stop, step, dtype=dtype)
+    
+    @staticmethod
+    def shuffle_(data):
+        key = jax.random.PRNGKey(10)
+        return jax.random.permutation(key, data)
 
     # ********** Creation Methods **********
     # TODO: should optimize when data is already a jax.ndarray
@@ -44,7 +55,7 @@ class MPSBackend:
 
     @classmethod
     def zeros_like(cls, input, dtype):
-        raise NotImplementedError(f'Tensor.zeros_like not yet supported on {cls.device}')
+        return jnp.zeros_like(input, dtype=dtype)
 
     @classmethod
     def ones(cls, shape, dtype):
@@ -52,7 +63,7 @@ class MPSBackend:
 
     @classmethod
     def ones_like(cls, input, dtype):
-        raise NotImplementedError(f'Tensor.ones_like not yet supported on {cls.device}')
+        return jnp.ones_like(input, dtype=dtype)
 
     @classmethod
     def randn(cls, *shape, dtype):
@@ -61,7 +72,7 @@ class MPSBackend:
 
     @classmethod
     def empty(cls, *shape, dtype):
-        raise NotImplementedError(f'Tensor.empty not yet supported on {cls.device}')
+        return jnp.empty(shape, dtype=dtype)
 
     # ********** Shape Manipulation Methods **********
     @classmethod
@@ -83,7 +94,7 @@ class MPSBackend:
 
     @staticmethod
     def leaky_relu(negative_slope):
-        raise NotImplementedError(f'Tensor.leaky_relu not yet supported on {MPSBackend.device}')
+        return mlops.LeakyReLU(negative_slope)
 
     # ********** Unary ops **********
     @staticmethod

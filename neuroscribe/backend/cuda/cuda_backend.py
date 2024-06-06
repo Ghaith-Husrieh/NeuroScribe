@@ -31,6 +31,14 @@ class CUDABackend:
     def uniform_(cls, lower_bound, upper_bound, shape):
         return cp.random.uniform(lower_bound, upper_bound, shape)
 
+    @staticmethod
+    def arange(start, stop, step, dtype):
+        return cp.arange(start, stop, step, dtype=dtype)
+
+    @staticmethod
+    def shuffle_(data):
+        cp.random.shuffle(data)
+
     # ********** Creation Methods **********
     # TODO: should optimize when data is already a cupy.ndarray
     @classmethod

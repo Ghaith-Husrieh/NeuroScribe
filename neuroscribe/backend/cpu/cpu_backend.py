@@ -37,6 +37,14 @@ class CPUBackend:
     def uniform_(cls, lower_bound, upper_bound, shape):
         return np.random.uniform(lower_bound, upper_bound, shape)
 
+    @staticmethod
+    def arange(start, stop, step, dtype):
+        return np.arange(start, stop, step, dtype=dtype)
+
+    @staticmethod
+    def shuffle_(data):
+        np.random.shuffle(data)
+
     # ********** Creation Methods **********
     # TODO: should optimize when data is already a numpy.ndarray
     @classmethod

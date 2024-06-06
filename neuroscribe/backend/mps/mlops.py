@@ -12,6 +12,17 @@ class ReLU(Function):
         (t1,) = result_tensor._prev
         t1.grad.data = t1.grad.data + (result_tensor.data > 0) * result_tensor.grad.data
 
+class LeakyReLU(Function):
+    def __init__(self, negative_slope):
+        self.negative_slope = negative_slope
+
+    def forward(self, t1):
+        return jnp.maximum(self.negative_slope * t1.data, t1.data)
+
+    def backward(self, result_tensor):
+        (t1,) = result_tensor._prev
+        t1.grad.data = t1.grad.data + jnp.where(t1.data > 0, 1, self.negative_slope) * result_tensor.grad.data
+
 
 class Mean(Function):
     def forward(self, t1): return jnp.mean(t1.data)

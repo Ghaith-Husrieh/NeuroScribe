@@ -159,6 +159,22 @@ class Tensor:
         requires_grad = requires_grad if requires_grad is not None else input.requires_grad
         return backend, dtype, requires_grad
 
+    # TODO: Needs Refactor
+    @staticmethod
+    def arange(start, stop=None, step=1, dtype='uint16', device='cpu'):
+        backend = Tensor._get_backend(device)
+        return Tensor(backend.arange(start, stop, step, dtype), backend=backend, requires_grad=False)
+
+    # TODO: Needs Refactor
+    @staticmethod
+    def shuffle_(tensor):
+        if not isinstance(tensor, Tensor):
+            raise TypeError("The shuffle method expects a Tensor object.")
+        if tensor.device == 'mps':
+            tensor.data = tensor._backend.shuffle_(tensor.data)
+        else:
+            tensor._backend.shuffle_(tensor.data)
+
     # ********** Creation Methods **********
     @staticmethod
     def create(data, dtype='float32', requires_grad=False, device='cpu'):
