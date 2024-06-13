@@ -13,28 +13,28 @@ class CPUBackend:
 
     device = 'cpu'
 
-    @classmethod
-    def is_contiguous(cls, data):
+    @staticmethod
+    def is_contiguous(data):
         return data.flags['C_CONTIGUOUS']
 
-    @classmethod
-    def make_contiguous(cls, data):
+    @staticmethod
+    def make_contiguous(data):
         return np.ascontiguousarray(data)
 
-    @classmethod
-    def deep_copy(cls, data):
+    @staticmethod
+    def deep_copy(data):
         return data.copy(order='C')
 
-    @classmethod
-    def shallow_copy(cls, data):
+    @staticmethod
+    def shallow_copy(data):
         return data.view()
 
-    @classmethod
-    def normal_(cls, mean, standard_deviation, shape):
+    @staticmethod
+    def normal_(mean, standard_deviation, shape):
         return np.random.normal(mean, standard_deviation, shape)
 
-    @classmethod
-    def uniform_(cls, lower_bound, upper_bound, shape):
+    @staticmethod
+    def uniform_(lower_bound, upper_bound, shape):
         return np.random.uniform(lower_bound, upper_bound, shape)
 
     @staticmethod
@@ -55,47 +55,47 @@ class CPUBackend:
 
     # ********** Creation Methods **********
     # TODO: should optimize when data is already a numpy.ndarray
-    @classmethod
-    def create(cls, data, dtype):
+    @staticmethod
+    def create(data, dtype):
         if CUPY_AVAILABLE and isinstance(data, cp.ndarray):
             return cp.asnumpy(data)
         return np.array(data, dtype=dtype)
 
-    @classmethod
-    def zeros(cls, shape, dtype):
+    @staticmethod
+    def zeros(shape, dtype):
         return np.zeros(shape, dtype=dtype)
 
-    @classmethod
-    def zeros_like(cls, input, dtype):
+    @staticmethod
+    def zeros_like(input, dtype):
         return np.zeros_like(input, dtype=dtype)
 
-    @classmethod
-    def ones(cls, shape, dtype):
+    @staticmethod
+    def ones(shape, dtype):
         return np.ones(shape, dtype=dtype)
 
-    @classmethod
-    def ones_like(cls, input, dtype):
+    @staticmethod
+    def ones_like(input, dtype):
         return np.ones_like(input, dtype=dtype)
 
-    @classmethod
-    def randn(cls, *shape, dtype):
+    @staticmethod
+    def randn(*shape, dtype):
         return np.random.randn(*shape).astype(dtype)
 
-    @classmethod
-    def empty(cls, *shape, dtype):
+    @staticmethod
+    def empty(*shape, dtype):
         return np.empty(*shape, dtype=dtype)
 
     # ********** Shape Manipulation Methods **********
-    @classmethod
-    def reshape(cls, data, new_shape):
+    @staticmethod
+    def reshape(data, new_shape):
         return data.reshape(new_shape)
 
-    @classmethod
-    def transpose(cls, data, axes):
+    @staticmethod
+    def transpose(data, axes):
         return data.transpose(axes)
 
-    @classmethod
-    def split(cls, data, indices_or_sections, axis):
+    @staticmethod
+    def split(data, indices_or_sections, axis):
         return np.split(data, indices_or_sections, axis)
 
     # ********** Activation Functions **********

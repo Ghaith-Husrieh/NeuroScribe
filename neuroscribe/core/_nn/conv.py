@@ -19,7 +19,6 @@ class Conv1d(Function):
         out_channels, _, kernel_size = self.weight.shape
         stride = _single(self.stride)
 
-        print(self.padding)
         (pad,) = _calculate_padding(self.padding, kernel_size=kernel_size, dim=1)
 
         input_padded = ns.pad(

@@ -8,29 +8,29 @@ class MPSBackend:
 
     device = 'mps'
 
-    @classmethod
-    def is_contiguous(cls, data):
-        raise NotImplementedError(f'Tensor.is_contiguous not yet supported on {cls.device}')
+    @staticmethod
+    def is_contiguous(data):
+        raise NotImplementedError(f'Tensor.is_contiguous not yet supported on {MPSBackend.device}')
 
-    @classmethod
-    def make_contiguous(cls, data):
-        raise NotImplementedError(f'Tensor.make_contiguous not yet supported on {cls.device}')
+    @staticmethod
+    def make_contiguous(data):
+        raise NotImplementedError(f'Tensor.make_contiguous not yet supported on {MPSBackend.device}')
 
-    @classmethod
-    def deep_copy(cls, data):
+    @staticmethod
+    def deep_copy(data):
         return jnp.copy(data, order='C')
 
-    @classmethod
-    def shallow_copy(cls, data):
+    @staticmethod
+    def shallow_copy(data):
         return data.view()
 
-    @classmethod
-    def normal_(cls, mean, standard_deviation, shape):
+    @staticmethod
+    def normal_(mean, standard_deviation, shape):
         key = jax.random.PRNGKey(0)
         return jax.random.normal(key, shape) * standard_deviation + mean
 
-    @classmethod
-    def uniform_(cls, lower_bound, upper_bound, shape):
+    @staticmethod
+    def uniform_(lower_bound, upper_bound, shape):
         key = jax.random.PRNGKey(0)
         return jax.random.uniform(key, shape, minval=lower_bound, maxval=upper_bound)
 
@@ -53,46 +53,46 @@ class MPSBackend:
 
     # ********** Creation Methods **********
     # TODO: should optimize when data is already a jax.ndarray
-    @classmethod
-    def create(cls, data, dtype):
+    @staticmethod
+    def create(data, dtype):
         return jnp.array(data, dtype=dtype)
 
-    @classmethod
-    def zeros(cls, shape, dtype):
+    @staticmethod
+    def zeros(shape, dtype):
         return jnp.zeros(shape, dtype=dtype)
 
-    @classmethod
-    def zeros_like(cls, input, dtype):
+    @staticmethod
+    def zeros_like(input, dtype):
         return jnp.zeros_like(input, dtype=dtype)
 
-    @classmethod
-    def ones(cls, shape, dtype):
+    @staticmethod
+    def ones(shape, dtype):
         return jnp.ones(shape, dtype=dtype)
 
-    @classmethod
-    def ones_like(cls, input, dtype):
+    @staticmethod
+    def ones_like(input, dtype):
         return jnp.ones_like(input, dtype=dtype)
 
-    @classmethod
-    def randn(cls, *shape, dtype):
+    @staticmethod
+    def randn(*shape, dtype):
         key = jax.random.PRNGKey(0)
         return jax.random.normal(key, shape).astype(dtype)
 
-    @classmethod
-    def empty(cls, *shape, dtype):
+    @staticmethod
+    def empty(*shape, dtype):
         return jnp.empty(shape, dtype=dtype)
 
     # ********** Shape Manipulation Methods **********
-    @classmethod
-    def reshape(cls, data, new_shape):
+    @staticmethod
+    def reshape(data, new_shape):
         return data.reshape(new_shape)
 
-    @classmethod
-    def transpose(cls, data, axes):
-        return jnp.transpose(data)
+    @staticmethod
+    def transpose(data, axes):
+        return jnp.transpose(data, axes)
 
-    @classmethod
-    def split(cls, data, indices_or_sections, axis):
+    @staticmethod
+    def split(data, indices_or_sections, axis):
         return jnp.split(data, indices_or_sections, axis)
 
     # ********** Activation Functions **********
