@@ -93,6 +93,9 @@ class Tensor:
     def zero_(self):
         self.data = self._backend.zeros(self.shape, dtype=self.dtype)
 
+    def ones_(self):
+        self.data = self._backend.ones(self.shape, dtype=self.dtype)
+
     def backward(self):
         if not self.requires_grad:
             raise RuntimeError('Gradient computation has not been enabled for this tensor.')
@@ -210,9 +213,14 @@ class Tensor:
         return Tensor(backend.randn(*shape, dtype=dtype), backend=backend, requires_grad=requires_grad)
 
     @staticmethod
-    def empty(*shape, dtype='float32', requires_grad=False, device='cpu'):
+    def empty(shape, dtype='float32', requires_grad=False, device='cpu'):
         backend = Tensor._get_backend(device)
-        return Tensor(backend.empty(*shape, dtype=dtype), backend=backend, requires_grad=requires_grad)
+        return Tensor(backend.empty(shape, dtype=dtype), backend=backend, requires_grad=requires_grad)
+
+    @staticmethod
+    def empty_like(input, dtype=None, requires_grad=None, device=None):
+        backend, dtype, requires_grad = Tensor._prepare_like_attributes(input, dtype, requires_grad, device)
+        return Tensor(backend.empty_like(input.data, dtype=dtype), backend=backend, requires_grad=requires_grad)
 
     def to(self, device):
         if self.device == device:

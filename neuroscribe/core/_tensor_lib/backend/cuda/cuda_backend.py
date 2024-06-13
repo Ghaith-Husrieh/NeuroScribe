@@ -74,8 +74,12 @@ class CUDABackend:
         return cp.random.randn(*shape).astype(dtype)
 
     @staticmethod
-    def empty(*shape, dtype):
-        return cp.empty(*shape, dtype=dtype)
+    def empty(shape, dtype):
+        return cp.empty(shape, dtype=dtype)
+
+    @staticmethod
+    def empty_like(input, dtype):
+        return cp.empty_like(input, dtype=dtype)
 
     # ********** Shape Manipulation Methods **********
     @staticmethod

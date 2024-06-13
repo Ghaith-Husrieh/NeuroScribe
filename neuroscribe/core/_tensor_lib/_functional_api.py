@@ -1,6 +1,6 @@
 from neuroscribe.core._tensor_lib._tensor import Tensor
 
-__all__ = ['tensor', 'arange', 'shuffle_', 'zeros', 'zeros_like', 'ones', 'ones_like', 'randn', 'empty',
+__all__ = ['tensor', 'arange', 'shuffle_', 'zeros', 'zeros_like', 'ones', 'ones_like', 'randn', 'empty', 'empty_like',
            'add', 'sub', 'mul', 'matmul', 'relu', 'leaky_relu', 'mean', 'square', 'pad']
 
 # Tensor Static Methods
@@ -13,6 +13,7 @@ ones = Tensor.ones
 ones_like = Tensor.ones_like
 randn = Tensor.randn
 empty = Tensor.empty
+empty_like = Tensor.empty_like
 pad = Tensor.pad
 
 

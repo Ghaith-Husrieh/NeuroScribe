@@ -79,8 +79,12 @@ class MPSBackend:
         return jax.random.normal(key, shape).astype(dtype)
 
     @staticmethod
-    def empty(*shape, dtype):
+    def empty(shape, dtype):
         return jnp.empty(shape, dtype=dtype)
+
+    @staticmethod
+    def empty_like(input, dtype):
+        return jnp.empty_like(input, dtype=dtype)
 
     # ********** Shape Manipulation Methods **********
     @staticmethod

@@ -82,8 +82,12 @@ class CPUBackend:
         return np.random.randn(*shape).astype(dtype)
 
     @staticmethod
-    def empty(*shape, dtype):
-        return np.empty(*shape, dtype=dtype)
+    def empty(shape, dtype):
+        return np.empty(shape, dtype=dtype)
+
+    @staticmethod
+    def empty_like(input, dtype):
+        return np.empty_like(input, dtype=dtype)
 
     # ********** Shape Manipulation Methods **********
     @staticmethod
