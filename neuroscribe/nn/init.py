@@ -2,8 +2,10 @@ import math
 
 
 def calculate_gain(nonlinearity, a):
-    if nonlinearity == 'linear':
+    if nonlinearity == 'linear' or nonlinearity == 'sigmoid':
         return 1
+    elif nonlinearity == 'tanh':
+        return 5.0 / 3
     elif nonlinearity == 'relu':
         return math.sqrt(2.0)
     elif nonlinearity == 'leaky_relu':
@@ -41,6 +43,23 @@ def kaiming_uniform(tensor, a=0, mode='fan_in', nonlinearity='leaky_relu', *, _r
     fan = calculate_correct_fan(tensor, mode, _reverse=_reverse)
     gain = calculate_gain(nonlinearity, a)
     std = gain / math.sqrt(fan)
+    bound = math.sqrt(3.0) * std
+
+    tensor.uniform_(-bound, bound)
+
+
+def xavier_normal(tensor, gain=1.0, *, _reverse=False):
+    fan_in = calculate_correct_fan(tensor, mode='fan_in', _reverse=_reverse)
+    fan_out = calculate_correct_fan(tensor, mode='fan_out', _reverse=_reverse)
+    std = gain * math.sqrt(2.0 / float(fan_in + fan_out))
+
+    tensor.normal_(0, std)
+
+
+def xavier_uniform(tensor, gain=1.0, *, _reverse=False):
+    fan_in = calculate_correct_fan(tensor, mode='fan_in', _reverse=_reverse)
+    fan_out = calculate_correct_fan(tensor, mode='fan_out', _reverse=_reverse)
+    std = gain * math.sqrt(2.0 / float(fan_in + fan_out))
     bound = math.sqrt(3.0) * std
 
     tensor.uniform_(-bound, bound)
