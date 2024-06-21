@@ -1,6 +1,6 @@
 import cupy as cp
 
-from neuroscribe.core._tensor_lib._tensor import Function
+from neuroscribe.autodiff.function import Function
 
 
 # ********** Unary ops **********

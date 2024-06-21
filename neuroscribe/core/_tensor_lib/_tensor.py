@@ -1,15 +1,7 @@
 import types
 from functools import partial
 
-
-class Function:
-    def __call__(self, *args):
-        return self.forward(*args)
-
-    def forward(self, *args): raise NotImplementedError(f"forward not implemented for {type(self)}")
-    def backward(self, result_tensor): raise RuntimeError(f"backward not implemented for {type(self)}")
-
-
+from neuroscribe.autodiff.grad import _align_gradient_shape, _build_graph
 from neuroscribe.core._tensor_lib.backend.cpu.cpu_backend import CPUBackend
 
 available_backends = {'cpu': CPUBackend}
@@ -26,8 +18,6 @@ try:
     available_backends['mps'] = MPSBackend
 except ImportError:
     pass
-
-from neuroscribe.core._utils._core import _align_gradient_shape
 
 
 class Tensor:
@@ -102,16 +92,7 @@ class Tensor:
 
         graph = []
         visited = set()
-
-        def build_graph(tensor):
-            if tensor not in visited:
-                visited.add(tensor)
-                for child in tensor._prev:
-                    if child.grad is None:
-                        raise RuntimeError('Gradient computation has not been enabled for one or more tensor(s).')
-                    build_graph(child)
-                graph.append(tensor)
-        build_graph(self)
+        _build_graph(self, graph, visited)
 
         self.grad = Tensor.ones(self.shape, dtype=self.dtype, requires_grad=False, device=self.device)
         for tensor in reversed(graph):
@@ -250,7 +231,7 @@ class Tensor:
     def _exec_op(self, _op, *inputs, reverse=False):
         inputs = [Tensor.create(input, dtype=self.dtype, requires_grad=self.requires_grad, device=self.device)
                   if not isinstance(input, Tensor) else input for input in inputs]
-        inputs = [self] + inputs if not reverse else inputs + [self]
+        inputs = reversed([self] + inputs) if reverse else [self] + inputs
 
         result_tensor = Tensor.create(_op(*inputs), dtype=self.dtype, requires_grad=False, device=self.device)
 

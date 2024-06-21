@@ -1,7 +1,7 @@
 import jax
 import jax.numpy as jnp
 
-from neuroscribe.core._tensor_lib._tensor import Function
+from neuroscribe.autodiff.function import Function
 
 
 # ********** Unary ops **********

@@ -1,5 +1,6 @@
 import neuroscribe as ns
-from neuroscribe.core._tensor_lib._tensor import Function, Tensor
+from neuroscribe.autodiff.function import Function
+from neuroscribe.core._tensor_lib._tensor import Tensor
 
 from .utils import (_calculate_padding, _pair, _single, _sliding_window_view,
                     _triple)
