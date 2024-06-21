@@ -108,6 +108,14 @@ class MPSBackend:
     def leaky_relu(negative_slope):
         return mlops.LeakyReLU(negative_slope)
 
+    @staticmethod
+    def tanh():
+        raise NotImplementedError(f'Tensor.tanh not yet supported on {MPSBackend.device}')
+
+    @staticmethod
+    def sigmoid():
+        raise NotImplementedError(f'Tensor.sigmoid not yet supported on {MPSBackend.device}')
+
     # ********** Unary ops **********
     @staticmethod
     def mean():

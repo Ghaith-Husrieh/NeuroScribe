@@ -23,3 +23,23 @@ class LeakyReLU(Module):
         if not isinstance(input, Tensor):
             input = Tensor.create(input, requires_grad=self._training, device=self._device)
         return F.leaky_relu(input, self.negative_slope)
+
+
+class Tanh(Module):
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, input):
+        if not isinstance(input, Tensor):
+            input = Tensor.create(input, requires_grad=self._training, device=self._device)
+        return F.tanh(input)
+
+
+class Sigmoid(Module):
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, input):
+        if not isinstance(input, Tensor):
+            input = Tensor.create(input, requires_grad=self._training, device=self._device)
+        return F.sigmoid(input)

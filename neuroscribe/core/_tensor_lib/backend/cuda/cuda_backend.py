@@ -112,6 +112,14 @@ class CUDABackend:
     def square():
         return mlops.Square()
 
+    @staticmethod
+    def tanh():
+        return mlops.Tanh()
+
+    @staticmethod
+    def sigmoid():
+        return mlops.Sigmoid()
+
     # ********** Binary Ops **********
     @staticmethod
     def add():

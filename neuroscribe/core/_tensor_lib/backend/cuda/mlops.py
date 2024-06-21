@@ -24,6 +24,25 @@ class LeakyReLU(Function):
         t1.grad.data = t1.grad.data + cp.where(t1.data > 0, 1, self.negative_slope) * result_tensor.grad.data
 
 
+class Tanh(Function):
+    def forward(self, t1):
+        return cp.tanh(t1.data)
+
+    def backward(self, result_tensor):
+        (t1,) = result_tensor._prev
+        t1.grad.data = t1.grad.data + (1 - cp.tanh(t1.data)**2) * result_tensor.grad.data
+
+
+class Sigmoid(Function):
+    def forward(self, t1):
+        return 1 / (1 + cp.exp(-t1.data))
+
+    def backward(self, result_tensor):
+        (t1,) = result_tensor._prev
+        sigmoid = 1 / (1 + cp.exp(-t1.data))
+        t1.grad.data = t1.grad.data + sigmoid * (1 - sigmoid) * result_tensor.grad.data
+
+
 class Mean(Function):
     def forward(self, t1): return cp.mean(t1.data)
 

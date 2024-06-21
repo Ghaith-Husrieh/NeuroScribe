@@ -15,6 +15,14 @@ def leaky_relu(input, negative_slope=0.01):
     return input.leaky_relu(negative_slope)
 
 
+def tanh(input):
+    return input.tanh()
+
+
+def sigmoid(input):
+    return input.sigmoid()
+
+
 # ********** NN Layers **********
 def linear(input, weight, bias):
     if bias is not None:
