@@ -136,6 +136,18 @@ class CPUBackend:
     def sign():
         return mlops.Sign()
 
+    @staticmethod
+    def sqrt():
+        return mlops.Sqrt()
+
+    @staticmethod
+    def log():
+        return mlops.Log()
+
+    @staticmethod
+    def exp():
+        return mlops.Exp()
+
     # ********** Binary Ops **********
     @staticmethod
     def pow():

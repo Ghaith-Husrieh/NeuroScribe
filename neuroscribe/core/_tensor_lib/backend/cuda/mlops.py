@@ -76,6 +76,30 @@ class Sign(Function):
         t1.grad.data = t1.grad.data + 0 * result_tensor.grad.data
 
 
+class Sqrt(Function):
+    def forward(self, t1): return cp.sqrt(t1.data)
+
+    def backward(self, result_tensor):
+        (t1,) = result_tensor._prev
+        t1.grad.data = t1.grad.data + (1 / (2 * cp.sqrt(t1.data))) * result_tensor.grad.data
+
+
+class Log(Function):
+    def forward(self, t1): return cp.log(t1.data)
+
+    def backward(self, result_tensor):
+        (t1,) = result_tensor._prev
+        t1.grad.data = t1.grad.data + (1 / t1.data) * result_tensor.grad.data
+
+
+class Exp(Function):
+    def forward(self, t1): return cp.exp(t1.data)
+
+    def backward(self, result_tensor):
+        (t1,) = result_tensor._prev
+        t1.grad.data = t1.grad.data + cp.exp(t1.data) * result_tensor.grad.data
+
+
 # ********** Binary ops **********
 class Pow(Function):
     def forward(self, t1, t2): return cp.power(t1.data, t2.data)

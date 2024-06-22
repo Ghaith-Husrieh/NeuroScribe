@@ -133,6 +133,18 @@ class MPSBackend:
     def sign():
         raise NotImplementedError(f'Tensor.sign not yet supported on {MPSBackend.device}')
 
+    @staticmethod
+    def sqrt():
+        raise NotImplementedError(f'Tensor.sqrt not yet supported on {MPSBackend.device}')
+
+    @staticmethod
+    def log():
+        raise NotImplementedError(f'Tensor.log not yet supported on {MPSBackend.device}')
+
+    @staticmethod
+    def exp():
+        raise NotImplementedError(f'Tensor.exp not yet supported on {MPSBackend.device}')
+
     # ********** Binary Ops **********
     @staticmethod
     def pow():

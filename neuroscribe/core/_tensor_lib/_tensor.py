@@ -1,3 +1,4 @@
+import math
 import types
 from functools import partial
 
@@ -268,6 +269,13 @@ class Tensor:
     def square(self): return self._exec_op(self._backend.square())
     def sign(self): return self._exec_op(self._backend.sign())
     def abs(self): return self * self.sign()
+    def sqrt(self): return self._exec_op(self._backend.sqrt())
+    def log(self): return self._exec_op(self._backend.log())
+    def log10(self): return self.log() / math.log(10)
+    def log2(self): return self.log() / math.log(2)
+    def log1p(self): return (self + 1).log()
+    def exp(self): return self._exec_op(self._backend.exp())
+    def exp2(self): return (self * math.log(2)).exp()
 
     # ********** Binary Ops **********
     def pow(self, exponent, reverse=False): return self._exec_op(self._backend.pow(), exponent, reverse=reverse)
