@@ -77,6 +77,15 @@ class Sign(Function):
 
 
 # ********** Binary ops **********
+class Pow(Function):
+    def forward(self, t1, t2): return cp.power(t1.data, t2.data)
+
+    def backward(self, result_tensor):
+        t1, t2 = result_tensor._prev
+        t1.grad.data = t1.grad.data + t2.data * cp.power(t1.data, t2.data - 1) * result_tensor.grad.data
+        t2.grad.data = t2.grad.data + result_tensor.data * cp.log(t1.data) * result_tensor.grad.data
+
+
 class Add(Function):
     def forward(self, t1, t2): return t1.data + t2.data
 
@@ -102,6 +111,15 @@ class Mul(Function):
         t1, t2 = result_tensor._prev
         t1.grad.data = t1.grad.data + t2.data * result_tensor.grad.data
         t2.grad.data = t2.grad.data + t1.data * result_tensor.grad.data
+
+
+class Div(Function):
+    def forward(self, t1, t2): return t1.data / t2.data
+
+    def backward(self, result_tensor):
+        t1, t2 = result_tensor._prev
+        t1.grad.data = t1.grad.data + (1 / t2.data) * result_tensor.grad.data
+        t2.grad.data = t2.grad.data + (-t1.data / (t2.data**2)) * result_tensor.grad.data
 
 
 class MatMul(Function):

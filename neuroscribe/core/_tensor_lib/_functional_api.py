@@ -1,7 +1,7 @@
 from neuroscribe.core._tensor_lib._tensor import Tensor
 
 __all__ = ['tensor', 'arange', 'shuffle_', 'zeros', 'zeros_like', 'ones', 'ones_like', 'randn', 'empty', 'empty_like',
-           'add', 'sub', 'mul', 'matmul', 'relu', 'leaky_relu', 'tanh', 'sigmoid', 'mean', 'sum', 'square', 'sign', 'abs', 'pad']
+           'add', 'sub', 'mul', 'div', 'matmul', 'relu', 'leaky_relu', 'tanh', 'sigmoid', 'mean', 'sum', 'square', 'sign', 'abs', 'pow', 'pad']
 
 # Tensor Static Methods
 tensor = Tensor.create
@@ -27,7 +27,9 @@ def sum(input): return input.sum()
 def square(input): return input.square()
 def sign(input): return input.sign()
 def abs(input): return input.abs()
+def pow(input, exponent): return input.pow(exponent)
 def add(input, other): return input.add(other)
 def sub(input, other): return input.sub(other)
 def mul(input, other): return input.mul(other)
+def div(input, other): return input.div(other)
 def matmul(input, other): return input.matmul(other)

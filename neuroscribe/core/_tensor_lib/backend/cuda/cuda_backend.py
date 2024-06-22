@@ -130,6 +130,10 @@ class CUDABackend:
 
     # ********** Binary Ops **********
     @staticmethod
+    def pow():
+        return mlops.Pow()
+
+    @staticmethod
     def add():
         return mlops.Add()
 
@@ -140,6 +144,10 @@ class CUDABackend:
     @staticmethod
     def mul():
         return mlops.Mul()
+
+    @staticmethod
+    def div():
+        return mlops.Div()
 
     @staticmethod
     def matmul():

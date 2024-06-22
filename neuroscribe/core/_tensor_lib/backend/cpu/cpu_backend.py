@@ -138,6 +138,10 @@ class CPUBackend:
 
     # ********** Binary Ops **********
     @staticmethod
+    def pow():
+        return mlops.Pow()
+
+    @staticmethod
     def add():
         return mlops.Add()
 
@@ -148,6 +152,10 @@ class CPUBackend:
     @staticmethod
     def mul():
         return mlops.Mul()
+
+    @staticmethod
+    def div():
+        return mlops.Div()
 
     @staticmethod
     def matmul():

@@ -135,6 +135,10 @@ class MPSBackend:
 
     # ********** Binary Ops **********
     @staticmethod
+    def pow():
+        raise NotImplementedError(f'Tensor.pow not yet supported on {MPSBackend.device}')
+
+    @staticmethod
     def add():
         return mlops.Add()
 
@@ -145,6 +149,10 @@ class MPSBackend:
     @staticmethod
     def mul():
         return mlops.Mul()
+
+    @staticmethod
+    def div():
+        raise NotImplementedError(f'Tensor.div not yet supported on {MPSBackend.device}')
 
     @staticmethod
     def matmul():

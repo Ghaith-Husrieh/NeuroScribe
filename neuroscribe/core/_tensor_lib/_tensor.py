@@ -258,17 +258,23 @@ class Tensor:
     def abs(self): return self * self.sign()
 
     # ********** Binary Ops **********
+    def pow(self, exponent, reverse=False): return self._exec_op(self._backend.pow(), exponent, reverse=reverse)
     def add(self, other, reverse=False): return self._exec_op(self._backend.add(), other, reverse=reverse)
     def sub(self, other, reverse=False): return self._exec_op(self._backend.sub(), other, reverse=reverse)
     def mul(self, other, reverse=False): return self._exec_op(self._backend.mul(), other, reverse=reverse)
+    def div(self, other, reverse=False): return self._exec_op(self._backend.div(), other, reverse=reverse)
     def matmul(self, other, reverse=False): return self._exec_op(self._backend.matmul(), other, reverse=reverse)
 
+    def __pow__(self, other): return self.pow(other)
     def __add__(self, other): return self.add(other)
     def __sub__(self, other): return self.sub(other)
     def __mul__(self, other): return self.mul(other)
+    def __truediv__(self, other): return self.div(other)
     def __matmul__(self, other): return self.matmul(other)
 
+    def __rpow__(self, other): return self.pow(other, reverse=True)
     def __radd__(self, other): return self.add(other, reverse=True)
     def __rsub__(self, other): return self.sub(other, reverse=True)
     def __rmul__(self, other): return self.mul(other, reverse=True)
+    def __rtruediv__(self, other): return self.div(other, reverse=True)
     def __rmatmul__(self, other): return self.matmul(other, reverse=True)
