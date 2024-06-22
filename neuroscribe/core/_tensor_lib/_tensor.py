@@ -250,6 +250,7 @@ class Tensor:
 
     # ********** Reduction Ops **********
     def mean(self): return self._exec_op(self._backend.mean())
+    def sum(self): return self._exec_op(self._backend.sum())
 
     # ********** Unary Ops **********
     def square(self): return self._exec_op(self._backend.square())

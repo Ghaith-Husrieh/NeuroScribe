@@ -117,6 +117,10 @@ class CUDABackend:
         return mlops.Mean()
 
     @staticmethod
+    def sum():
+        return mlops.Sum()
+
+    @staticmethod
     def square():
         return mlops.Square()
 

@@ -51,6 +51,14 @@ class Mean(Function):
         t1.grad.data = t1.grad.data + result_tensor.grad.data / t1.data.size
 
 
+class Sum(Function):
+    def forward(self, t1): return np.sum(t1.data)
+
+    def backward(self, result_tensor):
+        (t1,) = result_tensor._prev
+        t1.grad.data = t1.grad.data + 1 * result_tensor.grad.data
+
+
 class Square(Function):
     def forward(self, t1): return np.square(t1.data)
 

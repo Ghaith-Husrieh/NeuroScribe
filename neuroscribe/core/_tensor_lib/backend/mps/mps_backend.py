@@ -122,6 +122,10 @@ class MPSBackend:
         return mlops.Mean()
 
     @staticmethod
+    def sum():
+        raise NotImplementedError(f'Tensor.sum not yet supported on {MPSBackend.device}')
+
+    @staticmethod
     def square():
         return mlops.Square()
 
