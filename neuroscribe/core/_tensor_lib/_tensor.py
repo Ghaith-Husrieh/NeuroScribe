@@ -103,6 +103,18 @@ class Tensor:
     def __repr__(self):
         return f"Tensor({self.data}, dtype={self.dtype})"
 
+    def __getitem__(self, index):
+        if isinstance(index, slice) or isinstance(index, int):
+            return Tensor.create(self.data[index], dtype=self.dtype, requires_grad=self.requires_grad, device=self.device)
+        else:
+            raise TypeError("Index must be an integer or slice object")
+
+    def __setitem__(self, index, value):
+        if isinstance(index, slice) or isinstance(index, int):
+            self.data[index] = value
+        else:
+            raise TypeError("Index must be an integer or slice object")
+
     def __getstate__(self):
         state = self.__dict__.copy()
         if isinstance(state['_grad_fn'], types.LambdaType):
