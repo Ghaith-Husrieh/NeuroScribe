@@ -6,6 +6,10 @@ def mse_loss(predictions, targets):
     return (predictions - targets).square().mean()
 
 
+def l1_loss(predictions, targets):
+    return (predictions - targets).abs().mean()
+
+
 # ********** Activation Functions **********
 def relu(input):
     return input.relu()
