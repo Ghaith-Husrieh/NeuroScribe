@@ -103,6 +103,14 @@ class CUDABackend:
     def leaky_relu(negative_slope):
         return mlops.LeakyReLU(negative_slope)
 
+    @staticmethod
+    def tanh():
+        return mlops.Tanh()
+
+    @staticmethod
+    def sigmoid():
+        return mlops.Sigmoid()
+
     # ********** Unary ops **********
     @staticmethod
     def mean():
@@ -113,12 +121,8 @@ class CUDABackend:
         return mlops.Square()
 
     @staticmethod
-    def tanh():
-        return mlops.Tanh()
-
-    @staticmethod
-    def sigmoid():
-        return mlops.Sigmoid()
+    def sign():
+        return mlops.Sign()
 
     # ********** Binary Ops **********
     @staticmethod

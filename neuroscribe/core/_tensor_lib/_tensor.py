@@ -253,6 +253,8 @@ class Tensor:
 
     # ********** Unary Ops **********
     def square(self): return self._exec_op(self._backend.square())
+    def sign(self): return self._exec_op(self._backend.sign())
+    def abs(self): return self * self.sign()
 
     # ********** Binary Ops **********
     def add(self, other, reverse=False): return self._exec_op(self._backend.add(), other, reverse=reverse)

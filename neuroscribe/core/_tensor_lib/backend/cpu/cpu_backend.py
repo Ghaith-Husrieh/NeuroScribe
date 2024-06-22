@@ -128,6 +128,10 @@ class CPUBackend:
     def square():
         return mlops.Square()
 
+    @staticmethod
+    def sign():
+        return mlops.Sign()
+
     # ********** Binary Ops **********
     @staticmethod
     def add():

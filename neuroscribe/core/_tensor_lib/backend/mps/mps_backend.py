@@ -125,6 +125,10 @@ class MPSBackend:
     def square():
         return mlops.Square()
 
+    @staticmethod
+    def sign():
+        raise NotImplementedError(f'Tensor.sign not yet supported on {MPSBackend.device}')
+
     # ********** Binary Ops **********
     @staticmethod
     def add():
