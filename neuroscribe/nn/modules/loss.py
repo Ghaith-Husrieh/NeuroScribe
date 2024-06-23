@@ -17,3 +17,11 @@ class L1Loss(Module):
 
     def forward(self, predictions, targets):
         return F.l1_loss(predictions, targets)
+
+
+class BCELoss(Module):
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, predictions, targets):
+        return F.binary_cross_entropy(predictions, targets)

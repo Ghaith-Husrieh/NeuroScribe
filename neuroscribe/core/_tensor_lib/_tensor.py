@@ -244,7 +244,7 @@ class Tensor:
     def _exec_op(self, _op, *inputs, reverse=False):
         inputs = [Tensor.create(input, dtype=self.dtype, requires_grad=self.requires_grad, device=self.device)
                   if not isinstance(input, Tensor) else input for input in inputs]
-        inputs = reversed([self] + inputs) if reverse else [self] + inputs
+        inputs = list(reversed([self] + inputs)) if reverse else [self] + inputs
 
         result_tensor = Tensor.create(_op(*inputs), dtype=self.dtype, requires_grad=False, device=self.device)
 

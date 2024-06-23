@@ -10,6 +10,11 @@ def l1_loss(predictions, targets):
     return (predictions - targets).abs().mean()
 
 
+def binary_cross_entropy(predictions, targets):
+    predictions = predictions.clip(min=1e-10, max=1 - 1e-10)
+    return (targets * predictions.log() + (1 - targets) * (1 - predictions).log()).mean().neg()
+
+
 # ********** Activation Functions **********
 def relu(input):
     return input.relu()
