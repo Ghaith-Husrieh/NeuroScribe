@@ -137,6 +137,10 @@ class CPUBackend:
         return mlops.Sign()
 
     @staticmethod
+    def reciprocal():
+        return mlops.Reciprocal()
+
+    @staticmethod
     def sqrt():
         return mlops.Sqrt()
 
@@ -147,6 +151,14 @@ class CPUBackend:
     @staticmethod
     def exp():
         return mlops.Exp()
+
+    @staticmethod
+    def sin():
+        return mlops.Sin()
+
+    @staticmethod
+    def cos():
+        return mlops.Cos()
 
     # ********** Binary Ops **********
     @staticmethod

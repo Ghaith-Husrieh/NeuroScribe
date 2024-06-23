@@ -76,6 +76,14 @@ class Sign(Function):
         t1.grad.data = t1.grad.data + 0 * result_tensor.grad.data
 
 
+class Reciprocal(Function):
+    def forward(self, t1): return np.reciprocal(t1.data)
+
+    def backward(self, result_tensor):
+        (t1,) = result_tensor._prev
+        t1.grad.data = t1.grad.data + (-1 / (t1.data**2)) * result_tensor.grad.data
+
+
 class Sqrt(Function):
     def forward(self, t1): return np.sqrt(t1.data)
 
@@ -98,6 +106,22 @@ class Exp(Function):
     def backward(self, result_tensor):
         (t1,) = result_tensor._prev
         t1.grad.data = t1.grad.data + np.exp(t1.data) * result_tensor.grad.data
+
+
+class Sin(Function):
+    def forward(self, t1): return np.sin(t1.data)
+
+    def backward(self, result_tensor):
+        (t1,) = result_tensor._prev
+        t1.grad.data = t1.grad.data + np.cos(t1.data) * result_tensor.grad.data
+
+
+class Cos(Function):
+    def forward(self, t1): return np.cos(t1.data)
+
+    def backward(self, result_tensor):
+        (t1,) = result_tensor._prev
+        t1.grad.data = t1.grad.data + -np.sin(t1.data) * result_tensor.grad.data
 
 
 # ********** Binary ops **********
