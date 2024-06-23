@@ -255,18 +255,16 @@ class Tensor:
 
         return result_tensor
 
-    # ********** Activation Functions **********
-    def relu(self): return self._exec_op(self._backend.relu())
-    def leaky_relu(self, negative_slope=0.01): return self._exec_op(self._backend.leaky_relu(negative_slope))
-    def tanh(self): return self._exec_op(self._backend.tanh())
-    def sigmoid(self): return self._exec_op(self._backend.sigmoid())
-
     # ********** Reduction Ops **********
     def mean(self): return self._exec_op(self._backend.mean())
     def sum(self): return self._exec_op(self._backend.sum())
 
     # ********** Unary Ops **********
+    def relu(self): return self._exec_op(self._backend.relu())
+    def leaky_relu(self, negative_slope=0.01): return self._exec_op(self._backend.leaky_relu(negative_slope))
+    def sigmoid(self): return self._exec_op(self._backend.sigmoid())
     def square(self): return self._exec_op(self._backend.square())
+    def neg(self): return self._exec_op(self._backend.neg())
     def sign(self): return self._exec_op(self._backend.sign())
     def abs(self): return self * self.sign()
     def reciprocal(self): return self._exec_op(self._backend.reciprocal())
@@ -281,6 +279,10 @@ class Tensor:
     def sin(self): return self._exec_op(self._backend.sin())
     def cos(self): return self._exec_op(self._backend.cos())
     def tan(self): return self.sin() / self.cos()
+    # NOTE: 2.0 * ((2.0 * self).sigmoid()) - 1.0 could be used instead, but it may result in lower precision.
+    def tanh(self): return self._exec_op(self._backend.tanh())
+    def sinh(self): return (self.exp() - self.neg().exp()) / 2
+    def cosh(self): return (self.exp() + self.neg().exp()) / 2
 
     # ********** Binary Ops **********
     def pow(self, exponent, reverse=False): return self._exec_op(self._backend.pow(), exponent, reverse=reverse)

@@ -99,23 +99,6 @@ class MPSBackend:
     def split(data, indices_or_sections, axis):
         return jnp.split(data, indices_or_sections, axis)
 
-    # ********** Activation Functions **********
-    @staticmethod
-    def relu():
-        return mlops.ReLU()
-
-    @staticmethod
-    def leaky_relu(negative_slope):
-        return mlops.LeakyReLU(negative_slope)
-
-    @staticmethod
-    def tanh():
-        raise NotImplementedError(f'Tensor.tanh not yet supported on {MPSBackend.device}')
-
-    @staticmethod
-    def sigmoid():
-        raise NotImplementedError(f'Tensor.sigmoid not yet supported on {MPSBackend.device}')
-
     # ********** Unary ops **********
     @staticmethod
     def mean():
@@ -126,8 +109,24 @@ class MPSBackend:
         raise NotImplementedError(f'Tensor.sum not yet supported on {MPSBackend.device}')
 
     @staticmethod
+    def relu():
+        return mlops.ReLU()
+
+    @staticmethod
+    def leaky_relu(negative_slope):
+        return mlops.LeakyReLU(negative_slope)
+
+    @staticmethod
+    def sigmoid():
+        raise NotImplementedError(f'Tensor.sigmoid not yet supported on {MPSBackend.device}')
+
+    @staticmethod
     def square():
         return mlops.Square()
+
+    @staticmethod
+    def neg():
+        raise NotImplementedError(f'Tensor.neg not yet supported on {MPSBackend.device}')
 
     @staticmethod
     def sign():
@@ -156,6 +155,10 @@ class MPSBackend:
     @staticmethod
     def cos():
         raise NotImplementedError(f'Tensor.cos not yet supported on {MPSBackend.device}')
+
+    @staticmethod
+    def tanh():
+        raise NotImplementedError(f'Tensor.tanh not yet supported on {MPSBackend.device}')
 
     # ********** Binary Ops **********
     @staticmethod

@@ -67,6 +67,14 @@ class Square(Function):
         t1.grad.data = t1.grad.data + 2 * t1.data * result_tensor.grad.data
 
 
+class Neg(Function):
+    def forward(self, t1): return np.negative(t1.data)
+
+    def backward(self, result_tensor):
+        (t1,) = result_tensor._prev
+        t1.grad.data = t1.grad.data + (-1 * result_tensor.grad.data)
+
+
 class Sign(Function):
     def forward(self, t1):
         return np.sign(t1.data)

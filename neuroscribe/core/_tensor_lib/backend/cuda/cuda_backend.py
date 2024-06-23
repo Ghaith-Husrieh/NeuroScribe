@@ -94,23 +94,6 @@ class CUDABackend:
     def split(data, indices_or_sections, axis):
         return cp.split(data, indices_or_sections, axis)
 
-    # ********** Activation Functions **********
-    @staticmethod
-    def relu():
-        return mlops.ReLU()
-
-    @staticmethod
-    def leaky_relu(negative_slope):
-        return mlops.LeakyReLU(negative_slope)
-
-    @staticmethod
-    def tanh():
-        return mlops.Tanh()
-
-    @staticmethod
-    def sigmoid():
-        return mlops.Sigmoid()
-
     # ********** Unary ops **********
     @staticmethod
     def mean():
@@ -121,8 +104,24 @@ class CUDABackend:
         return mlops.Sum()
 
     @staticmethod
+    def relu():
+        return mlops.ReLU()
+
+    @staticmethod
+    def leaky_relu(negative_slope):
+        return mlops.LeakyReLU(negative_slope)
+
+    @staticmethod
+    def sigmoid():
+        return mlops.Sigmoid()
+
+    @staticmethod
     def square():
         return mlops.Square()
+
+    @staticmethod
+    def neg():
+        return mlops.Neg()
 
     @staticmethod
     def sign():
@@ -151,6 +150,10 @@ class CUDABackend:
     @staticmethod
     def cos():
         return mlops.Cos()
+
+    @staticmethod
+    def tanh():
+        return mlops.Tanh()
 
     # ********** Binary Ops **********
     @staticmethod
