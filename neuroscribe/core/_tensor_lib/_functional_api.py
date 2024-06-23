@@ -1,8 +1,9 @@
 from neuroscribe.core._tensor_lib._tensor import Tensor
 
 __all__ = ['tensor', 'arange', 'shuffle_', 'zeros', 'zeros_like', 'ones', 'ones_like', 'randn', 'empty', 'empty_like',
-           'add', 'sub', 'mul', 'div', 'matmul', 'relu', 'leaky_relu', 'tanh', 'sinh', 'cosh', 'sigmoid', 'mean', 'sum', 'square', 'neg', 'sign',
-           'abs', 'reciprocal', 'sqrt', 'rsqrt', 'log', 'log10', 'log2', 'log1p', 'exp', 'exp2', 'sin', 'cos', 'tan', 'pow', 'pad']
+           'add', 'sub', 'mul', 'div', 'matmul', 'relu', 'leaky_relu', 'tanh', 'sinh', 'cosh', 'hardtanh', 'sigmoid', 'mean', 'sum',
+           'square', 'neg', 'clip', 'sign', 'abs', 'reciprocal', 'sqrt', 'rsqrt', 'log', 'log10', 'log2', 'log1p', 'exp', 'exp2',
+           'sin', 'cos', 'tan', 'pow', 'pad']
 
 # Tensor Static Methods
 tensor = Tensor.create
@@ -26,6 +27,7 @@ def mean(input): return input.mean()
 def sum(input): return input.sum()
 def square(input): return input.square()
 def neg(input): return input.neg()
+def clip(input, min, max): return input.clip(min, max)
 def sign(input): return input.sign()
 def abs(input): return input.abs()
 def reciprocal(input): return input.reciprocal()
@@ -43,6 +45,7 @@ def tan(input): return input.tan()
 def tanh(input): return input.tanh()
 def sinh(input): return input.sinh()
 def cosh(input): return input.cosh()
+def hardtanh(input, min=-1, max=1): return input.hardtanh(min, max)
 def pow(input, exponent): return input.pow(exponent)
 def add(input, other): return input.add(other)
 def sub(input, other): return input.sub(other)

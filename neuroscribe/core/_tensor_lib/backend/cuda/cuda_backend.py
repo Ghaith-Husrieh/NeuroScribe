@@ -124,6 +124,10 @@ class CUDABackend:
         return mlops.Neg()
 
     @staticmethod
+    def clip(min, max):
+        return mlops.Clip(min, max)
+
+    @staticmethod
     def sign():
         return mlops.Sign()
 

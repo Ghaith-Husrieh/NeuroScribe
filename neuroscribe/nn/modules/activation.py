@@ -35,6 +35,19 @@ class Tanh(Module):
         return F.tanh(input)
 
 
+class HardTanh(Module):
+    def __init__(self, min=-1, max=1):
+        super().__init__()
+        self.min = min
+        self.max = max
+        assert self.max > self.min
+
+    def forward(self, input):
+        if not isinstance(input, Tensor):
+            input = Tensor.create(input, requires_grad=self._training, device=self._device)
+        return F.hardtanh(input, self.min, self.max)
+
+
 class Sigmoid(Module):
     def __init__(self):
         super().__init__()

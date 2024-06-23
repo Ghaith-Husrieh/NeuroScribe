@@ -75,6 +75,22 @@ class Neg(Function):
         t1.grad.data = t1.grad.data + (-1 * result_tensor.grad.data)
 
 
+class Clip(Function):
+    def __init__(self, min, max):
+        self.min = min
+        self.max = max
+
+    def forward(self, t1): return np.clip(t1.data, self.min, self.max)
+
+    def backward(self, result_tensor):
+        (t1,) = result_tensor._prev
+        t1.grad.data = t1.grad.data + np.where(
+            (t1.data <= self.min) | (t1.data >= self.max),
+            0,
+            result_tensor.grad.data
+        )
+
+
 class Sign(Function):
     def forward(self, t1):
         return np.sign(t1.data)

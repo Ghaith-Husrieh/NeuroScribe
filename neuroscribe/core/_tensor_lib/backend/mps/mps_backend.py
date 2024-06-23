@@ -129,6 +129,10 @@ class MPSBackend:
         raise NotImplementedError(f'Tensor.neg not yet supported on {MPSBackend.device}')
 
     @staticmethod
+    def clip(min, max):
+        raise NotImplementedError(f'Tensor.clip not yet supported on {MPSBackend.device}')
+
+    @staticmethod
     def sign():
         raise NotImplementedError(f'Tensor.sign not yet supported on {MPSBackend.device}')
 

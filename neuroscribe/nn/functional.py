@@ -23,6 +23,10 @@ def tanh(input):
     return input.tanh()
 
 
+def hardtanh(input, min=-1, max=1):
+    return input.hardtanh(min, max)
+
+
 def sigmoid(input):
     return input.sigmoid()
 

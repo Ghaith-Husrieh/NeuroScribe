@@ -265,6 +265,7 @@ class Tensor:
     def sigmoid(self): return self._exec_op(self._backend.sigmoid())
     def square(self): return self._exec_op(self._backend.square())
     def neg(self): return self._exec_op(self._backend.neg())
+    def clip(self, min, max): return self._exec_op(self._backend.clip(min, max))
     def sign(self): return self._exec_op(self._backend.sign())
     def abs(self): return self * self.sign()
     def reciprocal(self): return self._exec_op(self._backend.reciprocal())
@@ -283,6 +284,7 @@ class Tensor:
     def tanh(self): return self._exec_op(self._backend.tanh())
     def sinh(self): return (self.exp() - self.neg().exp()) / 2
     def cosh(self): return (self.exp() + self.neg().exp()) / 2
+    def hardtanh(self, min=-1, max=1): return self.clip(min, max)
 
     # ********** Binary Ops **********
     def pow(self, exponent, reverse=False): return self._exec_op(self._backend.pow(), exponent, reverse=reverse)
