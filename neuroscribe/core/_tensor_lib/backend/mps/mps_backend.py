@@ -109,6 +109,14 @@ class MPSBackend:
         raise NotImplementedError(f'Tensor.sum not yet supported on {MPSBackend.device}')
 
     @staticmethod
+    def max():
+        raise NotImplementedError(f'Tensor.max not yet supported on {MPSBackend.device}')
+
+    @staticmethod
+    def min():
+        raise NotImplementedError(f'Tensor.min not yet supported on {MPSBackend.device}')
+
+    @staticmethod
     def relu():
         return mlops.ReLU()
 

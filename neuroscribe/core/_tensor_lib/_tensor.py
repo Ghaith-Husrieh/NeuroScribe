@@ -258,6 +258,8 @@ class Tensor:
     # ********** Reduction Ops **********
     def mean(self): return self._exec_op(self._backend.mean())
     def sum(self): return self._exec_op(self._backend.sum())
+    def max(self): return self._exec_op(self._backend.max())
+    def min(self): return self._exec_op(self._backend.min())
 
     # ********** Unary Ops **********
     def relu(self): return self._exec_op(self._backend.relu())

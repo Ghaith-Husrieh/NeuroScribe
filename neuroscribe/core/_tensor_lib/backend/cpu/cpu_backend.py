@@ -112,6 +112,14 @@ class CPUBackend:
         return mlops.Sum()
 
     @staticmethod
+    def max():
+        return mlops.Max()
+
+    @staticmethod
+    def min():
+        return mlops.Min()
+
+    @staticmethod
     def relu():
         return mlops.ReLU()
 

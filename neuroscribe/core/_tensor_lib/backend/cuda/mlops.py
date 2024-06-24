@@ -59,6 +59,28 @@ class Sum(Function):
         t1.grad.data = t1.grad.data + 1 * result_tensor.grad.data
 
 
+class Max(Function):
+    def forward(self, t1): return cp.max(t1.data)
+
+    def backward(self, result_tensor):
+        (t1,) = result_tensor._prev
+        t1_partial_grad = cp.zeros_like(t1.data)
+        max_positions = cp.where(t1.data == result_tensor.data)[0]
+        t1_partial_grad[max_positions] = 1.0 / len(max_positions)
+        t1.grad.data = t1.grad.data + t1_partial_grad * result_tensor.grad.data
+
+
+class Min(Function):
+    def forward(self, t1): return cp.min(t1.data)
+
+    def backward(self, result_tensor):
+        (t1,) = result_tensor._prev
+        t1_partial_grad = cp.zeros_like(t1.data)
+        min_positions = cp.where(t1.data == result_tensor.data)[0]
+        t1_partial_grad[min_positions] = 1.0 / len(min_positions)
+        t1.grad.data = t1.grad.data + t1_partial_grad * result_tensor.grad.data
+
+
 class Square(Function):
     def forward(self, t1): return cp.square(t1.data)
 
