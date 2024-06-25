@@ -36,6 +36,14 @@ def sigmoid(input):
     return input.sigmoid()
 
 
+def softmax(input):
+    return input.softmax()
+
+
+def softmin(input):
+    return input.softmin()
+
+
 # ********** NN Layers **********
 def linear(input, weight, bias):
     if bias is not None:

@@ -1,9 +1,9 @@
 from neuroscribe.core._tensor_lib._tensor import Tensor
 
 __all__ = ['tensor', 'arange', 'shuffle_', 'zeros', 'zeros_like', 'ones', 'ones_like', 'randn', 'empty', 'empty_like',
-           'add', 'sub', 'mul', 'div', 'matmul', 'relu', 'leaky_relu', 'tanh', 'sinh', 'cosh', 'hardtanh', 'sigmoid', 'mean', 'sum',
-           'max', 'min', 'square', 'neg', 'clip', 'sign', 'abs', 'reciprocal', 'sqrt', 'rsqrt', 'log', 'log10', 'log2', 'log1p', 'exp', 'exp2',
-           'sin', 'cos', 'tan', 'pow', 'pad']
+           'add', 'sub', 'mul', 'div', 'matmul', 'relu', 'leaky_relu', 'tanh', 'sinh', 'cosh', 'hardtanh', 'sigmoid', 'softmax', 'softmin',
+           'mean', 'sum', 'max', 'min', 'square', 'neg', 'clip', 'sign', 'abs', 'reciprocal', 'sqrt', 'rsqrt', 'log', 'log10', 'log2', 'log1p',
+           'exp', 'exp2', 'sin', 'cos', 'tan', 'pow', 'pad']
 
 # Tensor Static Methods
 tensor = Tensor.create
@@ -23,6 +23,8 @@ pad = Tensor.pad
 def relu(input): return input.relu()
 def leaky_relu(input, negative_slope=0.01): return input.leaky_relu(negative_slope)
 def sigmoid(input): return input.sigmoid()
+def softmax(input): return input.softmax()
+def softmin(input): return input.softmin()
 def mean(input): return input.mean()
 def sum(input): return input.sum()
 def max(input): return input.max()

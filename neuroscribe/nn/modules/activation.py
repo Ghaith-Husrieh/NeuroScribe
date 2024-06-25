@@ -56,3 +56,23 @@ class Sigmoid(Module):
         if not isinstance(input, Tensor):
             input = Tensor.create(input, requires_grad=self._training, device=self._device)
         return F.sigmoid(input)
+
+
+class Softmax(Module):
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, input):
+        if not isinstance(input, Tensor):
+            input = Tensor.create(input, requires_grad=self._training, device=self._device)
+        return F.softmax(input)
+
+
+class Softmin(Module):
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, input):
+        if not isinstance(input, Tensor):
+            input = Tensor.create(input, requires_grad=self._training, device=self._device)
+        return F.softmin(input)
