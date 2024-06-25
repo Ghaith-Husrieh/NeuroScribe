@@ -64,6 +64,18 @@ def softmin(input):
     return input.softmin()
 
 
+def softplus(input, beta=1.0):
+    return input.softplus(beta)
+
+
+def mish(input):
+    return input.mish()
+
+
+def softsign(input):
+    return input.softsign()
+
+
 # ********** NN Layers **********
 def linear(input, weight, bias):
     if bias is not None:

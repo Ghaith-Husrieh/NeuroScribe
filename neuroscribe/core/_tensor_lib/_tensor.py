@@ -297,6 +297,9 @@ class Tensor:
     def acosh(self): return (self + (self.square() - 1).sqrt()).log()
     def hardtanh(self, min=-1, max=1): return self.clip(min, max)
     def gelu(self): return 0.5 * self * (1 + (math.sqrt(2 / math.pi) * (self + 0.044715 * self ** 3)).tanh())
+    def softplus(self, beta=1.0): return (1 / beta) * (1 + (self * beta).exp()).log()
+    def mish(self): return self * self.softplus().tanh()
+    def softsign(self): return self / (1 + self.abs())
 
     # ********** Binary Ops **********
     def pow(self, exponent, reverse=False): return self._exec_op(self._backend.pow(), exponent, reverse=reverse)

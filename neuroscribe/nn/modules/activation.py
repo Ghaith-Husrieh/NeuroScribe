@@ -127,3 +127,34 @@ class Softmin(Module):
         if not isinstance(input, Tensor):
             input = Tensor.create(input, requires_grad=self._training, device=self._device)
         return F.softmin(input)
+
+
+class Softplus(Module):
+    def __init__(self, beta=1.0):
+        super().__init__()
+        self.beta = beta
+
+    def forward(self, input):
+        if not isinstance(input, Tensor):
+            input = Tensor.create(input, requires_grad=self._training, device=self._device)
+        return F.softplus(input, self.beta)
+
+
+class Mish(Module):
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, input):
+        if not isinstance(input, Tensor):
+            input = Tensor.create(input, requires_grad=self._training, device=self._device)
+        return F.mish(input)
+
+
+class Softsign(Module):
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, input):
+        if not isinstance(input, Tensor):
+            input = Tensor.create(input, requires_grad=self._training, device=self._device)
+        return F.softsign(input)
