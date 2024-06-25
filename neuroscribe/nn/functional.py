@@ -32,6 +32,14 @@ def elu(input, alpha=1.0):
     return input.elu(alpha)
 
 
+def swish(input):
+    return input.swish()
+
+
+def silu(input):
+    return input.silu()
+
+
 def tanh(input):
     return input.tanh()
 

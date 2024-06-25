@@ -46,6 +46,26 @@ class ELU(Module):
         return F.elu(input, self.alpha)
 
 
+class Swish(Module):
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, input):
+        if not isinstance(input, Tensor):
+            input = Tensor.create(input, requires_grad=self._training, device=self._device)
+        return F.swish(input)
+
+
+class SiLU(Module):
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, input):
+        if not isinstance(input, Tensor):
+            input = Tensor.create(input, requires_grad=self._training, device=self._device)
+        return F.silu(input)
+
+
 class Tanh(Module):
     def __init__(self):
         super().__init__()

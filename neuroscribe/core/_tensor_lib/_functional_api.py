@@ -3,7 +3,7 @@ from neuroscribe.core._tensor_lib._tensor import Tensor
 __all__ = ['tensor', 'arange', 'shuffle_', 'zeros', 'zeros_like', 'ones', 'ones_like', 'randn', 'empty', 'empty_like',
            'add', 'sub', 'mul', 'div', 'matmul', 'relu', 'relu6', 'leaky_relu', 'tanh', 'sinh', 'cosh', 'hardtanh', 'sigmoid', 'softmax', 'softmin',
            'mean', 'sum', 'max', 'min', 'square', 'neg', 'clip', 'sign', 'abs', 'reciprocal', 'sqrt', 'rsqrt', 'log', 'log10', 'log2', 'log1p',
-           'exp', 'exp2', 'sin', 'cos', 'tan', 'atanh', 'asinh', 'acosh', 'gelu', 'elu', 'pow', 'pad']
+           'exp', 'exp2', 'sin', 'cos', 'tan', 'atanh', 'asinh', 'acosh', 'gelu', 'elu', 'swish', 'silu', 'pow', 'pad']
 
 # Tensor Static Methods
 tensor = Tensor.create
@@ -24,6 +24,8 @@ def relu(input): return input.relu()
 def relu6(input): return input.relu6()
 def leaky_relu(input, negative_slope=0.01): return input.leaky_relu(negative_slope)
 def elu(input, alpha=1.0): return input.elu(alpha)
+def swish(input): return input.swish()
+def silu(input): return input.silu()
 def sigmoid(input): return input.sigmoid()
 def softmax(input): return input.softmax()
 def softmin(input): return input.softmin()

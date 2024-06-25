@@ -266,6 +266,8 @@ class Tensor:
     def relu6(self): return self.relu() - (self - 6).relu()
     def leaky_relu(self, negative_slope=0.01): return self._exec_op(self._backend.leaky_relu(negative_slope))
     def elu(self, alpha=1.0): return self.relu() - alpha * (1 - self.exp()).relu()
+    def swish(self): return self * self.sigmoid()
+    def silu(self): return self.swish()
     def sigmoid(self): return self._exec_op(self._backend.sigmoid())
     def softmax(self): return (self - self.max()).exp() / (self - self.max()).exp().sum()
     def softmin(self): return ((self - self.max()).neg()).exp() / ((self - self.max()).neg()).exp().sum()
