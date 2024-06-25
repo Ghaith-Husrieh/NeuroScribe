@@ -288,6 +288,9 @@ class Tensor:
     def tanh(self): return self._exec_op(self._backend.tanh())
     def sinh(self): return (self.exp() - self.neg().exp()) / 2
     def cosh(self): return (self.exp() + self.neg().exp()) / 2
+    def atanh(self): return ((1 + self) / (1 - self)).log() / 2
+    def asinh(self): return (self + (self.square() + 1).sqrt()).log()
+    def acosh(self): return (self + (self.square() - 1).sqrt()).log()
     def hardtanh(self, min=-1, max=1): return self.clip(min, max)
 
     # ********** Binary Ops **********

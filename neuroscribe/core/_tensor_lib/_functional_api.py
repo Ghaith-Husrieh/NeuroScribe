@@ -3,7 +3,7 @@ from neuroscribe.core._tensor_lib._tensor import Tensor
 __all__ = ['tensor', 'arange', 'shuffle_', 'zeros', 'zeros_like', 'ones', 'ones_like', 'randn', 'empty', 'empty_like',
            'add', 'sub', 'mul', 'div', 'matmul', 'relu', 'leaky_relu', 'tanh', 'sinh', 'cosh', 'hardtanh', 'sigmoid', 'softmax', 'softmin',
            'mean', 'sum', 'max', 'min', 'square', 'neg', 'clip', 'sign', 'abs', 'reciprocal', 'sqrt', 'rsqrt', 'log', 'log10', 'log2', 'log1p',
-           'exp', 'exp2', 'sin', 'cos', 'tan', 'pow', 'pad']
+           'exp', 'exp2', 'sin', 'cos', 'tan', 'atanh', 'asinh', 'acosh', 'pow', 'pad']
 
 # Tensor Static Methods
 tensor = Tensor.create
@@ -49,6 +49,9 @@ def tan(input): return input.tan()
 def tanh(input): return input.tanh()
 def sinh(input): return input.sinh()
 def cosh(input): return input.cosh()
+def atanh(input): return input.atanh()
+def asinh(input): return input.asinh()
+def acosh(input): return input.acosh()
 def hardtanh(input, min=-1, max=1): return input.hardtanh(min, max)
 def pow(input, exponent): return input.pow(exponent)
 def add(input, other): return input.add(other)
