@@ -20,8 +20,16 @@ def relu(input):
     return input.relu()
 
 
+def relu6(input):
+    return input.relu6()
+
+
 def leaky_relu(input, negative_slope=0.01):
     return input.leaky_relu(negative_slope)
+
+
+def elu(input, alpha=1.0):
+    return input.elu(alpha)
 
 
 def tanh(input):
@@ -30,6 +38,10 @@ def tanh(input):
 
 def hardtanh(input, min=-1, max=1):
     return input.hardtanh(min, max)
+
+
+def gelu(input):
+    return input.gelu()
 
 
 def sigmoid(input):

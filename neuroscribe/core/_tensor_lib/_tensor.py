@@ -263,7 +263,9 @@ class Tensor:
 
     # ********** Unary Ops **********
     def relu(self): return self._exec_op(self._backend.relu())
+    def relu6(self): return self.relu() - (self - 6).relu()
     def leaky_relu(self, negative_slope=0.01): return self._exec_op(self._backend.leaky_relu(negative_slope))
+    def elu(self, alpha=1.0): return self.relu() - alpha * (1 - self.exp()).relu()
     def sigmoid(self): return self._exec_op(self._backend.sigmoid())
     def softmax(self): return (self - self.max()).exp() / (self - self.max()).exp().sum()
     def softmin(self): return ((self - self.max()).neg()).exp() / ((self - self.max()).neg()).exp().sum()
@@ -292,6 +294,7 @@ class Tensor:
     def asinh(self): return (self + (self.square() + 1).sqrt()).log()
     def acosh(self): return (self + (self.square() - 1).sqrt()).log()
     def hardtanh(self, min=-1, max=1): return self.clip(min, max)
+    def gelu(self): return 0.5 * self * (1 + (math.sqrt(2 / math.pi) * (self + 0.044715 * self ** 3)).tanh())
 
     # ********** Binary Ops **********
     def pow(self, exponent, reverse=False): return self._exec_op(self._backend.pow(), exponent, reverse=reverse)

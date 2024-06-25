@@ -14,6 +14,16 @@ class ReLU(Module):
         return F.relu(input)
 
 
+class ReLU6(Module):
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, input):
+        if not isinstance(input, Tensor):
+            input = Tensor.create(input, requires_grad=self._training, device=self._device)
+        return F.relu6(input)
+
+
 class LeakyReLU(Module):
     def __init__(self, negative_slope=0.01):
         super().__init__()
@@ -23,6 +33,17 @@ class LeakyReLU(Module):
         if not isinstance(input, Tensor):
             input = Tensor.create(input, requires_grad=self._training, device=self._device)
         return F.leaky_relu(input, self.negative_slope)
+
+
+class ELU(Module):
+    def __init__(self, alpha=1.0):
+        super().__init__()
+        self.alpha = alpha
+
+    def forward(self, input):
+        if not isinstance(input, Tensor):
+            input = Tensor.create(input, requires_grad=self._training, device=self._device)
+        return F.elu(input, self.alpha)
 
 
 class Tanh(Module):
@@ -46,6 +67,16 @@ class HardTanh(Module):
         if not isinstance(input, Tensor):
             input = Tensor.create(input, requires_grad=self._training, device=self._device)
         return F.hardtanh(input, self.min, self.max)
+
+
+class GELU(Module):
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, input):
+        if not isinstance(input, Tensor):
+            input = Tensor.create(input, requires_grad=self._training, device=self._device)
+        return F.gelu(input)
 
 
 class Sigmoid(Module):

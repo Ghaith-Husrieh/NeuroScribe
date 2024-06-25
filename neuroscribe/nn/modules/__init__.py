@@ -1,10 +1,10 @@
-from .activation import (HardTanh, LeakyReLU, ReLU, Sigmoid, Softmax, Softmin,
-                         Tanh)
+from .activation import (ELU, GELU, HardTanh, LeakyReLU, ReLU, ReLU6, Sigmoid,
+                         Softmax, Softmin, Tanh)
 from .container import Sequential
 from .conv import Conv1d, Conv2d, Conv3d
 from .linear import Linear
 from .loss import BCELoss, L1Loss, MSELoss
 from .module import Module
 
-__all__ = ['Linear', 'Module', 'ReLU', 'LeakyReLU', 'Tanh', 'HardTanh', 'Sigmoid', 'Softmax', 'Softmin',
+__all__ = ['Linear', 'Module', 'ReLU', 'ReLU6', 'LeakyReLU', 'ELU', 'Tanh', 'HardTanh', 'GELU', 'Sigmoid', 'Softmax', 'Softmin',
            'MSELoss', 'L1Loss', 'BCELoss', 'Conv1d', 'Conv2d', 'Conv3d', 'Sequential']
