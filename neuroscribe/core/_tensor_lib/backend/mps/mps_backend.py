@@ -79,6 +79,10 @@ class MPSBackend:
         return jax.random.normal(key, shape).astype(dtype)
 
     @staticmethod
+    def rand(*shape, dtype):
+        raise NotImplementedError(f'Tensor.rand not yet supported on {MPSBackend.device}')
+
+    @staticmethod
     def empty(shape, dtype):
         return jnp.empty(shape, dtype=dtype)
 
