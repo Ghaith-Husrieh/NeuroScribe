@@ -167,6 +167,12 @@ class Tensor:
             raise ValueError(f"Tensor with {self.numel()} elements cannot be converted to Python scalar")
         return self.data.item()
 
+    def argmax(self, dim=None):
+        return Tensor(self._backend.argmax(self.data, dim), backend=self._backend, requires_grad=False)
+
+    def argmin(self, dim=None):
+        return Tensor(self._backend.argmin(self.data, dim), backend=self._backend, requires_grad=False)
+
     def is_contiguous(self):
         return self._backend.is_contiguous(self.data)
 
@@ -281,8 +287,8 @@ class Tensor:
     def transpose(self, axes=None):
         return Tensor(self._backend.transpose(self.data, axes), backend=self._backend, requires_grad=self.requires_grad)
 
-    def split(self, indices_or_sections, axis=0):
-        result = self._backend.split(self.data, indices_or_sections, axis)
+    def split(self, indices_or_sections, dim=0):
+        result = self._backend.split(self.data, indices_or_sections, dim)
         return [Tensor.create(t, dtype=self.dtype, requires_grad=self.requires_grad, device=self.device) for t in result]
 
     # ********** Tensor Operations **********

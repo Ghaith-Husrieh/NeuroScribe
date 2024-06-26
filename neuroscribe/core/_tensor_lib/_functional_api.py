@@ -1,6 +1,6 @@
 from neuroscribe.core._tensor_lib._tensor import Tensor
 
-__all__ = ['tensor', 'arange', 'shuffle_', 'zeros', 'zeros_like', 'ones', 'ones_like', 'randn', 'rand', 'empty', 'empty_like',
+__all__ = ['tensor', 'arange', 'shuffle_', 'zeros', 'zeros_like', 'ones', 'ones_like', 'randn', 'rand', 'empty', 'empty_like', 'argmax', 'argmin',
            'add', 'sub', 'mul', 'div', 'matmul', 'relu', 'relu6', 'leaky_relu', 'tanh', 'sinh', 'cosh', 'hardtanh', 'sigmoid', 'softmax', 'log_softmax', 'softmin',
            'mean', 'sum', 'max', 'min', 'square', 'neg', 'clip', 'sign', 'abs', 'reciprocal', 'sqrt', 'rsqrt', 'log', 'log10', 'log2', 'log1p',
            'exp', 'exp2', 'sin', 'cos', 'tan', 'atanh', 'asinh', 'acosh', 'gelu', 'elu', 'swish', 'silu', 'softplus', 'mish', 'softsign', 'pow', 'pad']
@@ -21,6 +21,8 @@ pad = Tensor.pad
 
 
 # Tensor Instance Methods
+def argmax(input, dim=None): return input.argmax(dim)
+def argmin(input, dim=None): return input.argmin(dim)
 def relu(input): return input.relu()
 def relu6(input): return input.relu6()
 def leaky_relu(input, negative_slope=0.01): return input.leaky_relu(negative_slope)

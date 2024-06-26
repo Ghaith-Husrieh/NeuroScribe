@@ -8,6 +8,14 @@ class CUDABackend:
     device = 'cuda'
 
     @staticmethod
+    def argmax(data, dim):
+        return cp.argmax(data, dim)
+
+    @staticmethod
+    def argmin(data, dim):
+        return cp.argmin(data, dim)
+
+    @staticmethod
     def is_contiguous(data):
         return data.flags['C_CONTIGUOUS']
 
@@ -95,8 +103,8 @@ class CUDABackend:
         return data.transpose(axes)
 
     @staticmethod
-    def split(data, indices_or_sections, axis):
-        return cp.split(data, indices_or_sections, axis)
+    def split(data, indices_or_sections, dim):
+        return cp.split(data, indices_or_sections, dim)
 
     # ********** Unary ops **********
     @staticmethod

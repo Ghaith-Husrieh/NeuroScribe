@@ -14,6 +14,14 @@ class CPUBackend:
     device = 'cpu'
 
     @staticmethod
+    def argmax(data, dim):
+        return np.argmax(data, dim)
+
+    @staticmethod
+    def argmin(data, dim):
+        return np.argmin(data, dim)
+
+    @staticmethod
     def is_contiguous(data):
         return data.flags['C_CONTIGUOUS']
 
@@ -103,8 +111,8 @@ class CPUBackend:
         return data.transpose(axes)
 
     @staticmethod
-    def split(data, indices_or_sections, axis):
-        return np.split(data, indices_or_sections, axis)
+    def split(data, indices_or_sections, dim):
+        return np.split(data, indices_or_sections, dim)
 
     # ********** Unary ops **********
     @staticmethod

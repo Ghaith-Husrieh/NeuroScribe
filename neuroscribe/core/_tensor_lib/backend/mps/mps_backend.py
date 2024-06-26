@@ -9,6 +9,14 @@ class MPSBackend:
     device = 'mps'
 
     @staticmethod
+    def argmax(data, dim):
+        raise NotImplementedError(f'Tensor.argmax not yet supported on {MPSBackend.device}')
+
+    @staticmethod
+    def argmin(data, dim):
+        raise NotImplementedError(f'Tensor.argmin not yet supported on {MPSBackend.device}')
+
+    @staticmethod
     def is_contiguous(data):
         raise NotImplementedError(f'Tensor.is_contiguous not yet supported on {MPSBackend.device}')
 
@@ -100,8 +108,8 @@ class MPSBackend:
         return jnp.transpose(data, axes)
 
     @staticmethod
-    def split(data, indices_or_sections, axis):
-        return jnp.split(data, indices_or_sections, axis)
+    def split(data, indices_or_sections, dim):
+        return jnp.split(data, indices_or_sections, dim)
 
     # ********** Unary ops **********
     @staticmethod
