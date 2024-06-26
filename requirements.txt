@@ -7,3 +7,4 @@ numpy==1.26.4
 setuptools==69.2.0
 tqdm==4.65.0
 requests==2.31.0
+plotly==5.22.0
