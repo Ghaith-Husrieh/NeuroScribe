@@ -1,7 +1,6 @@
 import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-
 import neuroscribe as ns
 
 __all__ = ['DataLoader']
@@ -34,28 +33,28 @@ class DataLoader:
         if self.batch_size is None:
             return 1
         else:
-            batch_size = self.batch_size or self.indices.size
-            return (self.indices.size + batch_size - 1) // batch_size
+            batch_size = self.batch_size or self.indices.numel()
+            return (self.indices.numel() + batch_size - 1) // batch_size
 
     def __iter__(self):
         if self.shuffle:
             ns.shuffle_(self.indices)
 
         if self.batch_size is None:
-            batch_size = self.indices.size
+            batch_size = self.indices.numel()
         else:
             batch_size = self.batch_size
 
         if self.num_workers > 0:
             with ThreadPoolExecutor(max_workers=self.num_workers) as executor:
                 futures = [executor.submit(self._load_batch, self.indices.data[i:i + batch_size])
-                           for i in range(0, self.indices.size, batch_size)]
+                           for i in range(0, self.indices.numel(), batch_size)]
                 for future in as_completed(futures):
                     batch = future.result()
                     if batch:
                         yield self._group_batch(batch)
         else:
-            for i in range(0, self.indices.size, batch_size):
+            for i in range(0, self.indices.numel(), batch_size):
                 batch = self._load_batch(self.indices.data[i:i + batch_size])
                 if batch:
                     yield self._group_batch(batch)

@@ -47,16 +47,28 @@ class Tensor:
         return self.data.shape
 
     @property
-    def size(self):
-        return self.data.size
-
-    @property
     def ndim(self):
         return self.data.ndim
 
     @property
     def strides(self):
         return self.data.strides
+
+    @property
+    def itemsize(self):
+        return self.data.itemsize
+
+    @property
+    def is_cpu(self):
+        return self.device == 'cpu'
+
+    @property
+    def is_cuda(self):
+        return self.device == 'cuda'
+
+    @property
+    def is_mps(self):
+        return self.device == 'mps'
 
     @property
     def grad(self):
@@ -74,6 +86,18 @@ class Tensor:
     @property
     def T(self):
         return self.transpose()
+
+    def size(self, dim=None):
+        return self.shape if dim is None else self.shape[dim]
+
+    def numel(self):
+        return math.prod(self.shape)
+
+    def element_size(self):
+        return self.itemsize
+
+    def nbytes(self):
+        return self.numel() * self.element_size()
 
     def normal_(self, mean, standard_deviation):
         self.data = self._backend.normal_(mean, standard_deviation, self.shape)
@@ -126,6 +150,16 @@ class Tensor:
         self.__dict__.update(state)
         if self._grad_fn is None:
             self._grad_fn = lambda: None
+
+    def detach(self):
+        if self.requires_grad == False:
+            return self
+        return Tensor(self.data, backend=self._backend, requires_grad=False)
+
+    def item(self):
+        if self.numel() != 1:
+            raise ValueError(f"Tensor with {self.numel()} elements cannot be converted to Python scalar")
+        return self.data.item()
 
     def is_contiguous(self):
         return self._backend.is_contiguous(self.data)
