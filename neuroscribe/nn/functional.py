@@ -16,64 +16,22 @@ def binary_cross_entropy(predictions, targets):
 
 
 # ********** Activation Functions **********
-def relu(input):
-    return input.relu()
-
-
-def relu6(input):
-    return input.relu6()
-
-
-def leaky_relu(input, negative_slope=0.01):
-    return input.leaky_relu(negative_slope)
-
-
-def elu(input, alpha=1.0):
-    return input.elu(alpha)
-
-
-def swish(input):
-    return input.swish()
-
-
-def silu(input):
-    return input.silu()
-
-
-def tanh(input):
-    return input.tanh()
-
-
-def hardtanh(input, min=-1, max=1):
-    return input.hardtanh(min, max)
-
-
-def gelu(input):
-    return input.gelu()
-
-
-def sigmoid(input):
-    return input.sigmoid()
-
-
-def softmax(input):
-    return input.softmax()
-
-
-def softmin(input):
-    return input.softmin()
-
-
-def softplus(input, beta=1.0):
-    return input.softplus(beta)
-
-
-def mish(input):
-    return input.mish()
-
-
-def softsign(input):
-    return input.softsign()
+def relu(input): return input.relu()
+def relu6(input): return input.relu6()
+def leaky_relu(input, negative_slope=0.01): return input.leaky_relu(negative_slope)
+def elu(input, alpha=1.0): return input.elu(alpha)
+def swish(input): return input.swish()
+def silu(input): return input.silu()
+def tanh(input): return input.tanh()
+def hardtanh(input, min=-1, max=1): return input.hardtanh(min, max)
+def gelu(input): return input.gelu()
+def sigmoid(input): return input.sigmoid()
+def softmax(input): return input.softmax()
+def log_softmax(input): return input.log_softmax()
+def softmin(input): return input.softmin()
+def softplus(input, beta=1.0): return input.softplus(beta)
+def mish(input): return input.mish()
+def softsign(input): return input.softsign()
 
 
 # ********** NN Layers **********

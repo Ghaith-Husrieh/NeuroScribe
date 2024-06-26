@@ -270,6 +270,7 @@ class Tensor:
     def silu(self): return self.swish()
     def sigmoid(self): return self._exec_op(self._backend.sigmoid())
     def softmax(self): return (self - self.max()).exp() / (self - self.max()).exp().sum()
+    def log_softmax(self): return (self - self.max()) - (self - self.max()).exp().sum().log()
     def softmin(self): return ((self - self.max()).neg()).exp() / ((self - self.max()).neg()).exp().sum()
     def square(self): return self._exec_op(self._backend.square())
     def neg(self): return self._exec_op(self._backend.neg())
