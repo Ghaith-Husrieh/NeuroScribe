@@ -151,6 +151,12 @@ class Tensor:
         if self._grad_fn is None:
             self._grad_fn = lambda: None
 
+    def __len__(self):
+        return self.shape[0] if self.ndim > 0 else 1
+
+    def __hash__(self):
+        return id(self)
+
     def detach(self):
         if self.requires_grad == False:
             return self
