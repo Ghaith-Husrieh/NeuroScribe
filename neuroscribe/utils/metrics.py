@@ -31,7 +31,7 @@ def _validate_inputs(y_true, y_pred, classification=False):
     return y_true, y_pred
 
 
-# ********** classification metrics **********
+# ********** Classification Metrics **********
 def precision_score(y_true, y_pred, average='macro', visualize=False):
     y_true, y_pred = _validate_inputs(y_true, y_pred, classification=True)
 
@@ -58,7 +58,7 @@ def precision_score(y_true, y_pred, average='macro', visualize=False):
         fig.update_layout(title_text='Precision Visualization')
         fig.show()
 
-    return precision
+    return Tensor.create(precision)
 
 
 def recall_score(y_true, y_pred, average='macro', visualize=False):
@@ -87,7 +87,7 @@ def recall_score(y_true, y_pred, average='macro', visualize=False):
         fig.update_layout(title_text='Recall Visualization')
         fig.show()
 
-    return recall
+    return Tensor.create(recall)
 
 
 def f1_score(y_true, y_pred, average='macro', visualize=False):
@@ -123,7 +123,7 @@ def f1_score(y_true, y_pred, average='macro', visualize=False):
         fig.update_layout(title_text='F1 Score Visualization')
         fig.show()
 
-    return f1
+    return Tensor.create(f1)
 
 
 def accuracy_score(y_true, y_pred, visualize=False):
@@ -139,7 +139,7 @@ def accuracy_score(y_true, y_pred, visualize=False):
         fig.update_layout(title_text='Accuracy Visualization')
         fig.show()
 
-    return accuracy
+    return Tensor.create(accuracy)
 
 
 def confusion_matrix(y_true, y_pred, visualize=False):
@@ -168,7 +168,7 @@ def confusion_matrix(y_true, y_pred, visualize=False):
         fig_sk.update_layout(title_text='Confusion Matrix (Sklearn)')
         fig_sk.show()
 
-    return cm
+    return Tensor.create(cm)
 
 
 # ********** Regression Metrics **********
@@ -178,19 +178,19 @@ def r_squared(y_true, y_pred):
     ss_tot = np.sum((y_true - np.mean(y_true)) ** 2)
     r2 = 1 - (ss_res / ss_tot)
 
-    return r2
+    return Tensor.create(r2)
 
 
 def mean_squared_error(y_true, y_pred):
     y_true, y_pred = _validate_inputs(y_true, y_pred)
-    return np.mean((y_true - y_pred) ** 2)
+    return Tensor.create(np.mean((y_true - y_pred) ** 2))
 
 
 def mean_absolute_error(y_true, y_pred):
     y_true, y_pred = _validate_inputs(y_true, y_pred)
-    return np.mean(np.abs(y_true - y_pred))
+    return Tensor.create(np.mean(np.abs(y_true - y_pred)))
 
 
 def root_mean_squared_error(y_true, y_pred):
     y_true, y_pred = _validate_inputs(y_true, y_pred)
-    return np.sqrt(np.mean((y_true - y_pred) ** 2))
+    return Tensor.create(np.sqrt(np.mean((y_true - y_pred) ** 2)))
