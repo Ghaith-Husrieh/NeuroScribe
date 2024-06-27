@@ -23,10 +23,11 @@ def _validate_inputs(y_true, y_pred, classification=False):
         raise ValueError("Length of y_true and y_pred must be the same")
 
     if classification:
-        unique_classes = np.unique(y_true)
-        for pred in y_pred:
-            if pred not in unique_classes:
-                raise ValueError(f"Predicted value {pred} is not in the classes of y_true")
+        invalid_predictions = set(y_pred.flatten()) - set(y_true.flatten())
+        if invalid_predictions:
+            raise ValueError(
+                f"The following predicted values are not in the set of true classes: {sorted(invalid_predictions)}"
+            )
 
     return y_true, y_pred
 
