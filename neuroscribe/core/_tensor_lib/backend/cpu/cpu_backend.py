@@ -94,6 +94,10 @@ class CPUBackend:
         return np.random.rand(*shape).astype(dtype)
 
     @staticmethod
+    def randint(low, high, shape, dtype):
+        return np.random.randint(low, high, shape, dtype=dtype)
+
+    @staticmethod
     def empty(shape, dtype):
         return np.empty(shape, dtype=dtype)
 

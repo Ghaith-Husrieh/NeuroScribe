@@ -91,6 +91,10 @@ class MPSBackend:
         raise NotImplementedError(f'Tensor.rand not yet supported on {MPSBackend.device}')
 
     @staticmethod
+    def randint(low, high, shape, dtype):
+        raise NotImplementedError(f'Tensor.randint not yet supported on {MPSBackend.device}')
+
+    @staticmethod
     def empty(shape, dtype):
         return jnp.empty(shape, dtype=dtype)
 

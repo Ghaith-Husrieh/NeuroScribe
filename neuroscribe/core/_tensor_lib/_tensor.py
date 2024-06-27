@@ -258,6 +258,11 @@ class Tensor:
         return Tensor(backend.rand(*shape, dtype=dtype), backend=backend, requires_grad=requires_grad)
 
     @staticmethod
+    def randint(low, high=None, shape=None, *, dtype='int32', requires_grad=False, device='cpu'):
+        backend = Tensor._get_backend(device)
+        return Tensor(backend.randint(low, high, shape, dtype=dtype), backend=backend, requires_grad=requires_grad)
+
+    @staticmethod
     def empty(shape, dtype='float32', requires_grad=False, device='cpu'):
         backend = Tensor._get_backend(device)
         return Tensor(backend.empty(shape, dtype=dtype), backend=backend, requires_grad=requires_grad)

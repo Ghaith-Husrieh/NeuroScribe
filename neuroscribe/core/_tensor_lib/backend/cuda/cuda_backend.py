@@ -86,6 +86,10 @@ class CUDABackend:
         return cp.random.rand(*shape).astype(dtype)
 
     @staticmethod
+    def randint(low, high, shape, dtype):
+        return cp.random.randint(low, high, shape, dtype=dtype)
+
+    @staticmethod
     def empty(shape, dtype):
         return cp.empty(shape, dtype=dtype)
 
