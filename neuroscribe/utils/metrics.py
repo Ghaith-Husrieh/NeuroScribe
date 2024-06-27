@@ -16,13 +16,13 @@ def _convert_to_numpy(*inputs):
     return validated_inputs
 
 
-def _validate_inputs(y_true, y_pred, classification=False):
+def _validate_inputs(y_true, y_pred, validate_predictions=False):
     y_true, y_pred = _convert_to_numpy(y_true, y_pred)
 
     if len(y_true) != len(y_pred):
         raise ValueError("Length of y_true and y_pred must be the same")
 
-    if classification:
+    if validate_predictions:
         invalid_predictions = set(y_pred.flatten()) - set(y_true.flatten())
         if invalid_predictions:
             raise ValueError(
@@ -33,8 +33,8 @@ def _validate_inputs(y_true, y_pred, classification=False):
 
 
 # ********** Classification Metrics **********
-def precision_score(y_true, y_pred, average='macro', visualize=False):
-    y_true, y_pred = _validate_inputs(y_true, y_pred, classification=True)
+def precision_score(y_true, y_pred, average='macro', visualize=False, validate_predictions=True):
+    y_true, y_pred = _validate_inputs(y_true, y_pred, validate_predictions=validate_predictions)
 
     if average == 'macro':
         classes = np.unique(y_true)
@@ -62,8 +62,8 @@ def precision_score(y_true, y_pred, average='macro', visualize=False):
     return Tensor.create(precision)
 
 
-def recall_score(y_true, y_pred, average='macro', visualize=False):
-    y_true, y_pred = _validate_inputs(y_true, y_pred, classification=True)
+def recall_score(y_true, y_pred, average='macro', visualize=False, validate_predictions=True):
+    y_true, y_pred = _validate_inputs(y_true, y_pred, validate_predictions=validate_predictions)
 
     if average == 'macro':
         classes = np.unique(y_true)
@@ -91,8 +91,8 @@ def recall_score(y_true, y_pred, average='macro', visualize=False):
     return Tensor.create(recall)
 
 
-def f1_score(y_true, y_pred, average='macro', visualize=False):
-    y_true, y_pred = _validate_inputs(y_true, y_pred, classification=True)
+def f1_score(y_true, y_pred, average='macro', visualize=False, validate_predictions=True):
+    y_true, y_pred = _validate_inputs(y_true, y_pred, validate_predictions=validate_predictions)
 
     if average == 'macro':
         classes = np.unique(y_true)
@@ -127,8 +127,8 @@ def f1_score(y_true, y_pred, average='macro', visualize=False):
     return Tensor.create(f1)
 
 
-def accuracy_score(y_true, y_pred, visualize=False):
-    y_true, y_pred = _validate_inputs(y_true, y_pred, classification=True)
+def accuracy_score(y_true, y_pred, visualize=False, validate_predictions=True):
+    y_true, y_pred = _validate_inputs(y_true, y_pred, validate_predictions=validate_predictions)
     accuracy = np.sum(y_true == y_pred) / len(y_true)
 
     if visualize:
@@ -143,8 +143,8 @@ def accuracy_score(y_true, y_pred, visualize=False):
     return Tensor.create(accuracy)
 
 
-def confusion_matrix(y_true, y_pred, visualize=False):
-    y_true, y_pred = _validate_inputs(y_true, y_pred, classification=True)
+def confusion_matrix(y_true, y_pred, visualize=False, validate_predictions=True):
+    y_true, y_pred = _validate_inputs(y_true, y_pred, validate_predictions=validate_predictions)
     classes = np.unique(y_true)
     num_classes = len(classes)
 
