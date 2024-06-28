@@ -1,3 +1,4 @@
+import csv
 import gzip
 import os
 import shutil
@@ -7,10 +8,12 @@ import numpy as np
 import requests
 from tqdm import tqdm
 
+from neuroscribe.core._tensor_lib._tensor import Tensor
+
 
 def _request_file(url):
     response = requests.get(url, stream=True)
-    response.raise_for_status()  # Ensure we notice bad responses
+    response.raise_for_status()
     return response
 
 
@@ -58,7 +61,7 @@ def _read_ubyte_data(file_path, chunk_size):
     with open(file_path, 'rb') as f:
         magic, num, rows, cols = _read_binary_header(f, '>4I')
         for _ in range(num):
-            img = np.fromfile(f, dtype=np.uint8, count=rows*cols)
+            img = np.fromfile(f, dtype=np.uint8, count=rows * cols)
             img = img.reshape((rows, cols))
             data.append(img)
     return data
@@ -78,3 +81,23 @@ def _read_binary_header(file, format_string):
     header_size = calcsize(format_string)
     header_bytes = file.read(header_size)
     return unpack(format_string, header_bytes)
+
+
+def _convert_to_numpy(*inputs):
+    validated_inputs = []
+    for input in inputs:
+        if isinstance(input, Tensor):
+            validated_inputs.append(input.asnumpy())
+        elif isinstance(input, np.ndarray):
+            validated_inputs.append(input)
+        else:
+            validated_inputs.append(np.array(input))
+    return validated_inputs
+
+
+def _ensure_ndim(input, ndim):
+    (input,) = _convert_to_numpy(input)
+    print(input)
+    if input.ndim != ndim:
+        raise ValueError(f"Input data must be {ndim}-dimensional")
+    return input

@@ -2,18 +2,7 @@ import numpy as np
 import plotly.graph_objs as go
 
 from neuroscribe.core._tensor_lib._tensor import Tensor
-
-
-def _convert_to_numpy(*inputs):
-    validated_inputs = []
-    for input in inputs:
-        if isinstance(input, Tensor):
-            validated_inputs.append(input.asnumpy())
-        elif isinstance(input, np.ndarray):
-            validated_inputs.append(input)
-        else:
-            raise ValueError(f"Inputs must be of type 'Tensor' or 'np.ndarray'. Got '{type(input)}' instead")
-    return validated_inputs
+from neuroscribe.core._utils._data import _convert_to_numpy
 
 
 def _validate_inputs(y_true, y_pred, validate_predictions=False):
