@@ -107,6 +107,14 @@ class CPUBackend:
 
     # ********** Shape Manipulation Methods **********
     @staticmethod
+    def flatten(data):
+        return data.flatten()
+
+    @staticmethod
+    def squeeze(data, dim):
+        return data.squeeze(dim)
+
+    @staticmethod
     def reshape(data, new_shape):
         return data.reshape(new_shape)
 

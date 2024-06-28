@@ -104,6 +104,14 @@ class MPSBackend:
 
     # ********** Shape Manipulation Methods **********
     @staticmethod
+    def flatten(data):
+        raise NotImplementedError(f'Tensor.flatten not yet supported on {MPSBackend.device}')
+
+    @staticmethod
+    def squeeze(data, dim):
+        raise NotImplementedError(f'Tensor.squeeze not yet supported on {MPSBackend.device}')
+
+    @staticmethod
     def reshape(data, new_shape):
         return data.reshape(new_shape)
 

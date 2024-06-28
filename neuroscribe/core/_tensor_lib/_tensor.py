@@ -286,6 +286,12 @@ class Tensor:
         return Tensor.create(self.data, dtype=dtype, requires_grad=self.requires_grad, device=self.device)
 
     # ********** Shape Manipulation Methods **********
+    def flatten(self):
+        return Tensor(self._backend.flatten(self.data), backend=self._backend, requires_grad=self.requires_grad)
+
+    def squeeze(self, dim=None):
+        return Tensor(self._backend.squeeze(self.data, dim), backend=self._backend, requires_grad=self.requires_grad)
+
     def reshape(self, new_shape):
         return Tensor(self._backend.reshape(self.data, new_shape), backend=self._backend, requires_grad=self.requires_grad)
 
