@@ -4,6 +4,18 @@ import plotly.graph_objs as go
 from neuroscribe.core._tensor_lib._tensor import Tensor
 from neuroscribe.core._utils._data import _convert_to_numpy
 
+__all__ = [
+    'precision_score',
+    'recall_score',
+    'f1_score',
+    'accuracy_score',
+    'confusion_matrix',
+    'r_squared',
+    'mean_squared_error',
+    'mean_absolute_error',
+    'root_mean_squared_error'
+]
+
 
 def _validate_inputs(y_true, y_pred, validate_predictions=False):
     y_true, y_pred = _convert_to_numpy(y_true, y_pred)
