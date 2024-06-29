@@ -111,16 +111,20 @@ class CPUBackend:
         return data.flatten()
 
     @staticmethod
+    def flip(data, dims):
+        return np.flip(data, dims)
+
+    @staticmethod
     def squeeze(data, dim):
         return data.squeeze(dim)
 
     @staticmethod
-    def reshape(data, new_shape):
-        return data.reshape(new_shape)
+    def reshape(data, shape):
+        return data.reshape(shape)
 
     @staticmethod
-    def transpose(data, axes):
-        return data.transpose(axes)
+    def transpose(data, dims):
+        return data.transpose(dims)
 
     @staticmethod
     def split(data, indices_or_sections, dim):

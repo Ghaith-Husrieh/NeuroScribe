@@ -289,14 +289,17 @@ class Tensor:
     def flatten(self):
         return Tensor(self._backend.flatten(self.data), backend=self._backend, requires_grad=self.requires_grad)
 
+    def flip(self, dims=None):
+        return Tensor(self._backend.flip(self.data, dims), backend=self._backend, requires_grad=self.requires_grad)
+
     def squeeze(self, dim=None):
         return Tensor(self._backend.squeeze(self.data, dim), backend=self._backend, requires_grad=self.requires_grad)
 
-    def reshape(self, new_shape):
-        return Tensor(self._backend.reshape(self.data, new_shape), backend=self._backend, requires_grad=self.requires_grad)
+    def reshape(self, shape):
+        return Tensor(self._backend.reshape(self.data, shape), backend=self._backend, requires_grad=self.requires_grad)
 
-    def transpose(self, axes=None):
-        return Tensor(self._backend.transpose(self.data, axes), backend=self._backend, requires_grad=self.requires_grad)
+    def transpose(self, dims=None):
+        return Tensor(self._backend.transpose(self.data, dims), backend=self._backend, requires_grad=self.requires_grad)
 
     def split(self, indices_or_sections, dim=0):
         result = self._backend.split(self.data, indices_or_sections, dim)

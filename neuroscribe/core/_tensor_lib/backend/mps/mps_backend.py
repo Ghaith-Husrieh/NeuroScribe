@@ -108,16 +108,20 @@ class MPSBackend:
         raise NotImplementedError(f'Tensor.flatten not yet supported on {MPSBackend.device}')
 
     @staticmethod
+    def flip(data, dims):
+        raise NotImplementedError(f'Tensor.flip not yet supported on {MPSBackend.device}')
+
+    @staticmethod
     def squeeze(data, dim):
         raise NotImplementedError(f'Tensor.squeeze not yet supported on {MPSBackend.device}')
 
     @staticmethod
-    def reshape(data, new_shape):
-        return data.reshape(new_shape)
+    def reshape(data, shape):
+        return data.reshape(shape)
 
     @staticmethod
-    def transpose(data, axes):
-        return jnp.transpose(data, axes)
+    def transpose(data, dims):
+        return jnp.transpose(data, dims)
 
     @staticmethod
     def split(data, indices_or_sections, dim):

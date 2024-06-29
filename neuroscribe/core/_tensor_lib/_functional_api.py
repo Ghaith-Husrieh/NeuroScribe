@@ -1,9 +1,10 @@
 from neuroscribe.core._tensor_lib._tensor import Tensor
 
 __all__ = ['tensor', 'arange', 'shuffle_', 'zeros', 'zeros_like', 'ones', 'ones_like', 'randn', 'rand', 'randint', 'empty', 'empty_like', 'argmax', 'argmin',
-           'add', 'sub', 'mul', 'div', 'matmul', 'relu', 'relu6', 'leaky_relu', 'tanh', 'sinh', 'cosh', 'hardtanh', 'sigmoid', 'softmax', 'log_softmax', 'softmin',
-           'mean', 'sum', 'max', 'min', 'square', 'neg', 'clip', 'sign', 'abs', 'reciprocal', 'sqrt', 'rsqrt', 'log', 'log10', 'log2', 'log1p',
-           'exp', 'exp2', 'sin', 'cos', 'tan', 'atanh', 'asinh', 'acosh', 'gelu', 'elu', 'swish', 'silu', 'softplus', 'mish', 'softsign', 'pow', 'pad']
+           'add', 'sub', 'mul', 'div', 'matmul', 'relu', 'relu6', 'leaky_relu', 'tanh', 'sinh', 'cosh', 'hardtanh', 'sigmoid', 'softmax', 'log_softmax',
+           'softmin', 'mean', 'sum', 'max', 'min', 'square', 'neg', 'clip', 'sign', 'abs', 'reciprocal', 'sqrt', 'rsqrt', 'log', 'log10', 'log2', 'log1p',
+           'exp', 'exp2', 'sin', 'cos', 'tan', 'atanh', 'asinh', 'acosh', 'gelu', 'elu', 'swish', 'silu', 'softplus', 'mish', 'softsign', 'pow', 'pad',
+           'flatten', 'flip', 'squeeze', 'reshape', 'transpose', 'split']
 
 # Tensor Static Methods
 tensor = Tensor.create
@@ -22,6 +23,12 @@ pad = Tensor.pad
 
 
 # Tensor Instance Methods
+def flatten(input): return input.flatten()
+def flip(input, dims=None): return input.flip(dims)
+def squeeze(input, dim=None): return input.squeeze(dim)
+def reshape(input, shape): return input.reshape(shape)
+def transpose(input, dims=None): return input.transpose(dims)
+def split(input, indices_or_sections, dim=0): return input.split(indices_or_sections, dim)
 def argmax(input, dim=None): return input.argmax(dim)
 def argmin(input, dim=None): return input.argmin(dim)
 def relu(input): return input.relu()
