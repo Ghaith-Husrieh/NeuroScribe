@@ -24,6 +24,24 @@ class LeakyReLU(Function):
         (t1,) = result_tensor._prev
         t1.grad.data = t1.grad.data + jnp.where(t1.data > 0, 1, self.negative_slope) * result_tensor.grad.data
 
+class Tanh(Function):
+    def forward(self, t1):
+        return jnp.tanh(t1.data)
+
+    def backward(self, result_tensor):
+        (t1,) = result_tensor._prev
+        t1.grad.data = t1.grad.data + (1 - jnp.tanh(t1.data)**2) * result_tensor.grad.data
+
+
+class Sigmoid(Function):
+    def forward(self, t1):
+        return 1 / (1 + jnp.exp(-t1.data))
+
+    def backward(self, result_tensor):
+        (t1,) = result_tensor._prev
+        sigmoid = 1 / (1 + jnp.exp(-t1.data))
+        t1.grad.data = t1.grad.data + sigmoid * (1 - sigmoid) * result_tensor.grad.data
+
 
 class Mean(Function):
     def forward(self, t1): return jnp.mean(t1.data)
@@ -31,6 +49,37 @@ class Mean(Function):
     def backward(self, result_tensor):
         (t1,) = result_tensor._prev
         t1.grad.data = t1.grad.data + result_tensor.grad.data / t1.data.size
+
+
+class Sum(Function):
+    def forward(self, t1): return jnp.sum(t1.data)
+
+    def backward(self, result_tensor):
+        (t1,) = result_tensor._prev
+        t1.grad.data = t1.grad.data + 1 * result_tensor.grad.data
+
+
+
+class Max(Function):
+    def forward(self, t1): return jnp.max(t1.data)
+
+    def backward(self, result_tensor):
+        (t1,) = result_tensor._prev
+        t1_partial_grad = jnp.zeros_like(t1.data)
+        max_positions = jnp.where(t1.data == result_tensor.data)[0]
+        t1_partial_grad[max_positions] = 1.0 / len(max_positions)
+        t1.grad.data = t1.grad.data + t1_partial_grad * result_tensor.grad.data
+
+
+class Min(Function):
+    def forward(self, t1): return jnp.min(t1.data)
+
+    def backward(self, result_tensor):
+        (t1,) = result_tensor._prev
+        t1_partial_grad = jnp.zeros_like(t1.data)
+        min_positions = jnp.where(t1.data == result_tensor.data)[0]
+        t1_partial_grad[min_positions] = 1.0 / len(min_positions)
+        t1.grad.data = t1.grad.data + t1_partial_grad * result_tensor.grad.data
 
 
 class Square(Function):
@@ -41,7 +90,97 @@ class Square(Function):
         t1.grad.data = t1.grad.data + 2 * t1.data * result_tensor.grad.data
 
 
+class Neg(Function):
+    def forward(self, t1): return jnp.negative(t1.data)
+
+    def backward(self, result_tensor):
+        (t1,) = result_tensor._prev
+        t1.grad.data = t1.grad.data + (-1 * result_tensor.grad.data)
+
+
+class Clip(Function):
+    def __init__(self, min, max):
+        self.min = min
+        self.max = max
+
+    def forward(self, t1): return jnp.clip(t1.data, self.min, self.max)
+
+    def backward(self, result_tensor):
+        (t1,) = result_tensor._prev
+        t1.grad.data = t1.grad.data + jnp.where(
+            (t1.data <= self.min) | (t1.data >= self.max),
+            0,
+            result_tensor.grad.data
+        )
+
+
+class Sign(Function):
+    def forward(self, t1):
+        return jnp.sign(t1.data)
+
+    def backward(self, result_tensor):
+        (t1,) = result_tensor._prev
+        t1.grad.data = t1.grad.data + 0 * result_tensor.grad.data
+
+
+class Reciprocal(Function):
+    def forward(self, t1): return jnp.reciprocal(t1.data)
+
+    def backward(self, result_tensor):
+        (t1,) = result_tensor._prev
+        t1.grad.data = t1.grad.data + (-1 / (t1.data**2)) * result_tensor.grad.data
+
+
+class Sqrt(Function):
+    def forward(self, t1): return jnp.sqrt(t1.data)
+
+    def backward(self, result_tensor):
+        (t1,) = result_tensor._prev
+        t1.grad.data = t1.grad.data + (1 / (2 * jnp.sqrt(t1.data))) * result_tensor.grad.data
+
+
+class Log(Function):
+    def forward(self, t1): return jnp.log(t1.data)
+
+    def backward(self, result_tensor):
+        (t1,) = result_tensor._prev
+        t1.grad.data = t1.grad.data + (1 / t1.data) * result_tensor.grad.data
+
+
+class Exp(Function):
+    def forward(self, t1): return jnp.exp(t1.data)
+
+    def backward(self, result_tensor):
+        (t1,) = result_tensor._prev
+        t1.grad.data = t1.grad.data + jnp.exp(t1.data) * result_tensor.grad.data
+
+
+class Sin(Function):
+    def forward(self, t1): return jnp.sin(t1.data)
+
+    def backward(self, result_tensor):
+        (t1,) = result_tensor._prev
+        t1.grad.data = t1.grad.data + jnp.cos(t1.data) * result_tensor.grad.data
+
+
+class Cos(Function):
+    def forward(self, t1): return jnp.cos(t1.data)
+
+    def backward(self, result_tensor):
+        (t1,) = result_tensor._prev
+        t1.grad.data = t1.grad.data + -jnp.sin(t1.data) * result_tensor.grad.data
+
+
 # ********** Binary ops **********
+class Pow(Function):
+    def forward(self, t1, t2): return jnp.power(t1.data, t2.data)
+
+    def backward(self, result_tensor):
+        t1, t2 = result_tensor._prev
+        t1.grad.data = t1.grad.data + t2.data * jnp.power(t1.data, t2.data - 1) * result_tensor.grad.data
+        t2.grad.data = t2.grad.data + result_tensor.data * jnp.log(t1.data) * result_tensor.grad.data
+
+
 class Add(Function):
     def forward(self, t1, t2): return t1.data + t2.data
 
@@ -67,6 +206,15 @@ class Mul(Function):
         t1, t2 = result_tensor._prev
         t1.grad.data = t1.grad.data + t2.data * result_tensor.grad.data
         t2.grad.data = t2.grad.data + t1.data * result_tensor.grad.data
+
+
+class Div(Function):
+    def forward(self, t1, t2): return t1.data / t2.data
+
+    def backward(self, result_tensor):
+        t1, t2 = result_tensor._prev
+        t1.grad.data = t1.grad.data + (1 / t2.data) * result_tensor.grad.data
+        t2.grad.data = t2.grad.data + (-t1.data / (t2.data**2)) * result_tensor.grad.data
 
 
 class MatMul(Function):

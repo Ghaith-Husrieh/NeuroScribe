@@ -10,11 +10,11 @@ class MPSBackend:
 
     @staticmethod
     def argmax(data, dim):
-        raise NotImplementedError(f'Tensor.argmax not yet supported on {MPSBackend.device}')
+        return jnp.argmax(data, dim)
 
     @staticmethod
     def argmin(data, dim):
-        raise NotImplementedError(f'Tensor.argmin not yet supported on {MPSBackend.device}')
+       return jnp.argmin(data, dim)
 
     @staticmethod
     def is_contiguous(data):
@@ -88,11 +88,13 @@ class MPSBackend:
 
     @staticmethod
     def rand(*shape, dtype):
-        raise NotImplementedError(f'Tensor.rand not yet supported on {MPSBackend.device}')
+        key = jax.random.PRNGKey(0)
+        return jax.random.uniform(key, shape).astype(dtype)
 
     @staticmethod
     def randint(low, high, shape, dtype):
-        raise NotImplementedError(f'Tensor.randint not yet supported on {MPSBackend.device}')
+        key = jax.random.PRNGKey(0)
+        return jax.random.randint(key, shape or (), low, high)
 
     @staticmethod
     def empty(shape, dtype):
@@ -105,15 +107,15 @@ class MPSBackend:
     # ********** Shape Manipulation Methods **********
     @staticmethod
     def flatten(data):
-        raise NotImplementedError(f'Tensor.flatten not yet supported on {MPSBackend.device}')
+        return data.flatten()
 
     @staticmethod
     def flip(data, dims):
-        raise NotImplementedError(f'Tensor.flip not yet supported on {MPSBackend.device}')
+        return jnp.flip(data, axis=dims)
 
     @staticmethod
     def squeeze(data, dim):
-        raise NotImplementedError(f'Tensor.squeeze not yet supported on {MPSBackend.device}')
+        return data.squeeze(dim)
 
     @staticmethod
     def reshape(data, shape):
@@ -134,15 +136,15 @@ class MPSBackend:
 
     @staticmethod
     def sum():
-        raise NotImplementedError(f'Tensor.sum not yet supported on {MPSBackend.device}')
+        return mlops.Sum()
 
     @staticmethod
     def max():
-        raise NotImplementedError(f'Tensor.max not yet supported on {MPSBackend.device}')
+        return mlops.Max()
 
     @staticmethod
     def min():
-        raise NotImplementedError(f'Tensor.min not yet supported on {MPSBackend.device}')
+        return mlops.Min()
 
     @staticmethod
     def relu():
@@ -154,7 +156,7 @@ class MPSBackend:
 
     @staticmethod
     def sigmoid():
-        raise NotImplementedError(f'Tensor.sigmoid not yet supported on {MPSBackend.device}')
+        return mlops.Sigmoid()
 
     @staticmethod
     def square():
@@ -162,48 +164,48 @@ class MPSBackend:
 
     @staticmethod
     def neg():
-        raise NotImplementedError(f'Tensor.neg not yet supported on {MPSBackend.device}')
+        return mlops.Neg()
 
     @staticmethod
     def clip(min, max):
-        raise NotImplementedError(f'Tensor.clip not yet supported on {MPSBackend.device}')
+        return mlops.Clip(min, max)
 
     @staticmethod
     def sign():
-        raise NotImplementedError(f'Tensor.sign not yet supported on {MPSBackend.device}')
+        return mlops.Sign()
 
     @staticmethod
     def reciprocal():
-        raise NotImplementedError(f'Tensor.reciprocal not yet supported on {MPSBackend.device}')
+        return mlops.Reciprocal()
 
     @staticmethod
     def sqrt():
-        raise NotImplementedError(f'Tensor.sqrt not yet supported on {MPSBackend.device}')
+        return mlops.Sqrt()
 
     @staticmethod
     def log():
-        raise NotImplementedError(f'Tensor.log not yet supported on {MPSBackend.device}')
+        return mlops.Log()
 
     @staticmethod
     def exp():
-        raise NotImplementedError(f'Tensor.exp not yet supported on {MPSBackend.device}')
+        return mlops.Exp()
 
     @staticmethod
     def sin():
-        raise NotImplementedError(f'Tensor.sin not yet supported on {MPSBackend.device}')
+        return mlops.Sin()
 
     @staticmethod
     def cos():
-        raise NotImplementedError(f'Tensor.cos not yet supported on {MPSBackend.device}')
+        return mlops.Cos()
 
     @staticmethod
     def tanh():
-        raise NotImplementedError(f'Tensor.tanh not yet supported on {MPSBackend.device}')
+        return mlops.Tanh()
 
     # ********** Binary Ops **********
     @staticmethod
     def pow():
-        raise NotImplementedError(f'Tensor.pow not yet supported on {MPSBackend.device}')
+        return mlops.Pow()
 
     @staticmethod
     def add():
@@ -219,7 +221,7 @@ class MPSBackend:
 
     @staticmethod
     def div():
-        raise NotImplementedError(f'Tensor.div not yet supported on {MPSBackend.device}')
+        return mlops.Div()
 
     @staticmethod
     def matmul():

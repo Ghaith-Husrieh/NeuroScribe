@@ -167,7 +167,7 @@ def confusion_matrix(y_true, y_pred, visualize=False, validate_predictions=True)
             hoverinfo='text'
         ))
 
-        fig_sk.update_layout(title_text='Confusion Matrix (Sklearn)')
+        fig_sk.update_layout(title_text='Confusion Matrix')
         fig_sk.show()
 
     return Tensor.create(cm)
