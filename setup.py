@@ -19,13 +19,13 @@ install_requires = ['numpy==1.26.4', 'tqdm==4.65.0', 'requests==2.31.0', 'plotly
 if cuda_available():
     install_requires.extend(['cupy-cuda12x==13.0.0', 'fastrlock==0.8.2'])
 if on_mac_silicon():
-    install_requires.extend(['jax==0.4.11', 'jaxlib==0.4.11', 'jax-metal==0.0.4'])
+    install_requires.extend(['jax-metal==0.1.0', 'jaxlib==0.4.30', 'jax==0.4.30'])
 long_description = (BASE_DIR / "README.md").read_text()
 
 
 setup(
     name='neuro-scribe',
-    version='0.1.0.post1',
+    version='0.2.0.post3',
     author='Ghaith Husrieh',
     description='NeuroScribe - a lightweight deep learning framework.',
     long_description=long_description,
@@ -35,9 +35,9 @@ setup(
         'Source': 'https://github.com/Ghaith-Husrieh/NeuroScribe'
     },
     classifiers=[
-        'Programming Language :: Python :: 3.12',
+        'Programming Language :: Python :: 3.11',
         'Operating System :: OS Independent',
     ],
-    python_requires='>=3.12',
+    python_requires='>=3.11',
     install_requires=install_requires
 )

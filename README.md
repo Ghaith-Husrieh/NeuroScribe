@@ -1,4 +1,4 @@
-<h1 align="center"> NeuroScribe v0.1.0 </h1>
+<h1 align="center"> NeuroScribe v0.2.0 </h1>
 
 <div align="center">
     <picture>
