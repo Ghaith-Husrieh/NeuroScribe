@@ -14,7 +14,7 @@ class MPSBackend:
 
     @staticmethod
     def argmin(data, dim):
-       return jnp.argmin(data, dim)
+        return jnp.argmin(data, dim)
 
     @staticmethod
     def is_contiguous(data):

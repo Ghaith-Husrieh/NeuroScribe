@@ -1,4 +1,6 @@
 import os
+import pickle
+import tarfile
 from collections import OrderedDict
 
 import numpy as np
@@ -6,10 +8,8 @@ import numpy as np
 import neuroscribe as ns
 from neuroscribe.core._utils._data import (_decompress_file, _request_file,
                                            _save_file)
-from neuroscribe.utils.data.utils import read_data
 from neuroscribe.utils.data.transforms import Compose
-import tarfile
-import pickle
+from neuroscribe.utils.data.utils import read_data
 
 __all__ = ['Dataset', 'MNIST', 'FashionMNIST']
 

@@ -158,7 +158,7 @@ def confusion_matrix(y_true, y_pred, visualize=False, validate_predictions=True)
         x_axis = [f'Predicted {cls}' for cls in classes]
         y_axis = [f'True {cls}' for cls in classes]
 
-        fig_sk = go.Figure(data=go.Heatmap(
+        fig = go.Figure(data=go.Heatmap(
             z=cm,
             x=x_axis,
             y=y_axis,
@@ -167,8 +167,8 @@ def confusion_matrix(y_true, y_pred, visualize=False, validate_predictions=True)
             hoverinfo='text'
         ))
 
-        fig_sk.update_layout(title_text='Confusion Matrix')
-        fig_sk.show()
+        fig.update_layout(title_text='Confusion Matrix')
+        fig.show()
 
     return Tensor.create(cm)
 

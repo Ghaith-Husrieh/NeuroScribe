@@ -1,17 +1,21 @@
-# NeuroScribe v0.1.0
+<h1 align="center"> NeuroScribe v0.1.0 </h1>
 
-NeuroScribe a lightweight deep learning framework.
+<div align="center">
+    <picture>
+        <img src="./docs/static/neuroscribe_logo.png">
+    </picture>
+</div>
 
 ## Installation
 
 ```
-pip install neuro-scribe
+> pip install neuro-scribe
 ```
 
-**Notes:**
-
-- If you want CUDA support for GPU acceleration, please ensure that you have CUDA Toolkit version 12 or higher installed on your device.<br> You can download CUDA Toolkit from the official NVIDIA website: [CUDA Toolkit Downloads](https://developer.nvidia.com/cuda-downloads)
-- If you're installing NeuroScribe on an Apple Silicon Mac, NeuroScribe will automatically detect the architecture and install additional dependencies for Metal Performance Shaders (MPS) support.
+> [!Note]
+>
+> - If you want CUDA support for GPU acceleration, please ensure that you have CUDA Toolkit version 12 or higher installed on your device.<br> You can download CUDA Toolkit from the official NVIDIA website: [CUDA Toolkit Downloads](https://developer.nvidia.com/cuda-downloads)
+> - If you're installing NeuroScribe on an Apple Silicon Mac, NeuroScribe will automatically detect the architecture and install additional dependencies for Metal Performance Shaders (MPS) support.
 
 ## Quick Start Example
 

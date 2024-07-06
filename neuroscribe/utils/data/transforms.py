@@ -1,6 +1,6 @@
+import random
 
 import numpy as np
-import random
 
 __all__ = [
     'Transformation',
@@ -37,9 +37,8 @@ class Resize(Transformation):
     def __call__(self, x):
         return np.resize(x, self.size)
 
+
 # TODO: This can be done in more general way
-
-
 class RandomCrop(Transformation):
     def __init__(self, size):
         self.size = size
@@ -103,8 +102,9 @@ class Normalize(Transformation):
                 f"Input tensor should be a numpy array. Got {type(tensor)}.")
 
         if tensor.ndim < 2:
-            raise ValueError(f"Expected tensor to be a tensor image of size (..., C, ...) or (..., ...). Got tensor.shape = {tensor.shape}")
-
+            raise ValueError(
+                f"Expected tensor to be a tensor image of size (..., C, ...) or (..., ...). Got tensor.shape = {tensor.shape}"
+            )
 
         mean = self.mean * self.max_pixel_value / 2.0
         std = self.std * self.max_pixel_value
@@ -133,6 +133,7 @@ class Compose:
                 x = t(x)
             else:
                 raise TypeError(
-                    f"Invalid transformation: {type(t)}. Expected an instance of 'Transformation'")
+                    f"Invalid transformation: {type(t)}. Expected an instance of 'Transformation'"
+                )
 
         return x

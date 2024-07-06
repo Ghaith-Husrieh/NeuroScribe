@@ -24,6 +24,7 @@ class LeakyReLU(Function):
         (t1,) = result_tensor._prev
         t1.grad.data = t1.grad.data + jnp.where(t1.data > 0, 1, self.negative_slope) * result_tensor.grad.data
 
+
 class Tanh(Function):
     def forward(self, t1):
         return jnp.tanh(t1.data)
@@ -57,7 +58,6 @@ class Sum(Function):
     def backward(self, result_tensor):
         (t1,) = result_tensor._prev
         t1.grad.data = t1.grad.data + 1 * result_tensor.grad.data
-
 
 
 class Max(Function):
