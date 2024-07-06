@@ -12,6 +12,7 @@ __all__ = [
     'RandomVerticalFlip',
     'RandomRotation',
     'Grayscale',
+    'Normalize',
     'Compose'
 ]
 
@@ -36,6 +37,8 @@ class Resize(Transformation):
     def __call__(self, x):
         return np.resize(x, self.size)
 
+# TODO: This can be done in more general way
+
 
 class RandomCrop(Transformation):
     def __init__(self, size):
@@ -48,6 +51,7 @@ class RandomCrop(Transformation):
         return x[top: top + self.size[0], left: left + self.size[1]]
 
 
+# TODO: This can be done in more general way
 class CenterCrop(Transformation):
     def __init__(self, size):
         self.size = size
@@ -85,6 +89,38 @@ class RandomRotation(Transformation):
 class Grayscale(Transformation):
     def __call__(self, x):
         return np.dot(x[..., :3], [0.2989, 0.5870, 0.1140])
+
+
+class Normalize(Transformation):
+    def __init__(self, mean=(0.5,), std=(0.5,), max_pixel_value=255.0):
+        self.mean = np.array(mean)
+        self.std = np.array(std)
+        self.max_pixel_value = max_pixel_value
+
+    def __call__(self, tensor):
+        if not isinstance(tensor, np.ndarray):
+            raise TypeError(
+                f"Input tensor should be a numpy array. Got {type(tensor)}.")
+
+        if tensor.ndim < 2:
+            raise ValueError(f"Expected tensor to be a tensor image of size (..., C, ...) or (..., ...). Got tensor.shape = {tensor.shape}")
+
+
+        mean = self.mean * self.max_pixel_value / 2.0
+        std = self.std * self.max_pixel_value
+
+        if np.any(std == 0):
+            raise ValueError(
+                "std evaluated to zero, leading to division by zero.")
+
+        if mean.ndim == 1:
+            mean = mean.reshape(-1, *((1,) * (tensor.ndim - 1)))
+        if std.ndim == 1:
+            std = std.reshape(-1, *((1,) * (tensor.ndim - 1)))
+
+        tensor = (tensor - mean) / std
+
+        return tensor
 
 
 class Compose:

@@ -81,7 +81,7 @@ class _MNISTDataset(Dataset):
 
         if self.transform:
             x = ns.tensor(
-                self.transform(x.data),
+                self.transform(x.asnumpy()),
                 requires_grad=False,
                 device=self._device
             )
@@ -143,7 +143,7 @@ class _CIFAR10Dataset(Dataset):
 
         if self.transform:
             x = ns.tensor(
-                self.transform(x.data),
+                self.transform(x.asnumpy()),
                 requires_grad=False,
                 device=self._device
             )
