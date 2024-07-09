@@ -11,15 +11,9 @@ def cuda_available():
     return 'CUDA_PATH' in os.environ or 'CUDA_HOME' in os.environ
 
 
-def on_mac_silicon():
-    return platform.system() == "Darwin" and "arm" in platform.machine().lower()
-
-
 install_requires = ['numpy==1.26.4', 'tqdm==4.65.0', 'requests==2.31.0', 'plotly==5.22.0']
 if cuda_available():
     install_requires.extend(['cupy-cuda12x==13.0.0', 'fastrlock==0.8.2'])
-if on_mac_silicon():
-    install_requires.extend(['jax-metal==0.1.0', 'jaxlib==0.4.30', 'jax==0.4.30'])
 long_description = (BASE_DIR / "README.md").read_text()
 
 

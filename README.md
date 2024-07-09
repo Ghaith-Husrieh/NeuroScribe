@@ -15,7 +15,6 @@
 > [!Note]
 >
 > - If you want CUDA support for GPU acceleration, please ensure that you have CUDA Toolkit version 12 or higher installed on your device.<br> You can download CUDA Toolkit from the official NVIDIA website: [CUDA Toolkit Downloads](https://developer.nvidia.com/cuda-downloads)
-> - If you're installing NeuroScribe on an Apple Silicon Mac, NeuroScribe will automatically detect the architecture and install additional dependencies for Metal Performance Shaders (MPS) support.
 
 ## Quick Start Example
 
@@ -59,7 +58,6 @@ Neuroscribe currently supports the following accelerators:
 
 - CPU (default)
 - CUDA
-- MPS (Metal Performance Shaders)
 
 We plan to add support for additional accelerators to further enhance performance capabilities.
 

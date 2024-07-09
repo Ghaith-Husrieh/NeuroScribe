@@ -14,16 +14,10 @@ try:
 except ImportError:
     pass
 
-try:
-    from neuroscribe.core._tensor_lib.backend.mps.mps_backend import MPSBackend
-    available_backends['mps'] = MPSBackend
-except ImportError:
-    pass
-
 
 class Tensor:
 
-    _supported_backends = ['cpu', 'cuda', 'mps']
+    _supported_backends = ['cpu', 'cuda']
     _backends = available_backends
 
     def __init__(self, data, backend, requires_grad=False):
@@ -65,10 +59,6 @@ class Tensor:
     @property
     def is_cuda(self):
         return self.device == 'cuda'
-
-    @property
-    def is_mps(self):
-        return self.device == 'mps'
 
     @property
     def grad(self):
@@ -196,10 +186,7 @@ class Tensor:
     def shuffle_(tensor):
         if not isinstance(tensor, Tensor):
             raise TypeError("The shuffle method expects a Tensor object.")
-        if tensor.device == 'mps':
-            tensor.data = tensor._backend.shuffle_(tensor.data)
-        else:
-            tensor._backend.shuffle_(tensor.data)
+        tensor._backend.shuffle_(tensor.data)
 
     @staticmethod
     def pad(input, pad, mode, *, constant_values):
