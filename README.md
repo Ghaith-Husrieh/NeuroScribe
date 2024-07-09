@@ -64,3 +64,7 @@ We plan to add support for additional accelerators to further enhance performanc
 ## Notes
 
 - Functions suffixed with '\_' in the Tensor class perform in-place modifications to the Tensor object and do not create a new Tensor as output.
+
+## License
+
+NeuroScribe is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
