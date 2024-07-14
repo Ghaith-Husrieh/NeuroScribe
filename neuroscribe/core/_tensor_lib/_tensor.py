@@ -3,22 +3,10 @@ import types
 from functools import partial
 
 from neuroscribe.autodiff.grad import _align_gradient_shape, _build_graph
-from neuroscribe.core._tensor_lib.backend.cpu.cpu_backend import CPUBackend
-
-available_backends = {'cpu': CPUBackend}
-
-try:
-    from neuroscribe.core._tensor_lib.backend.cuda.cuda_backend import \
-        CUDABackend
-    available_backends['cuda'] = CUDABackend
-except ImportError:
-    pass
+from neuroscribe.core._tensor_lib.backend.dispatcher import Dispatcher
 
 
 class Tensor:
-
-    _supported_backends = ['cpu', 'cuda']
-    _backends = available_backends
 
     def __init__(self, data, backend, requires_grad=False):
         self.data = data
@@ -179,7 +167,7 @@ class Tensor:
 
     @staticmethod
     def arange(start, stop=None, step=1, dtype='uint16', device='cpu'):
-        backend = Tensor._get_backend(device)
+        backend = Dispatcher.get_backend(device)
         return Tensor(backend.arange(start, stop, step, dtype), backend=backend, requires_grad=False)
 
     @staticmethod
@@ -194,16 +182,8 @@ class Tensor:
 
     # ********** Helper Methods **********
     @staticmethod
-    def _get_backend(device):
-        if device not in Tensor._supported_backends:
-            raise ValueError(f"Unsupported device '{device}'. Supported devices are: {Tensor._supported_backends}.")
-        if device not in Tensor._backends:
-            raise ValueError(f"NeuroScribe is not installed with support for {device.upper()} devices.")
-        return Tensor._backends[device]
-
-    @staticmethod
     def _prepare_like_attributes(input, dtype, requires_grad, device):
-        backend = Tensor._get_backend(device) if device is not None else input._backend
+        backend = Dispatcher.get_backend(device) if device is not None else input._backend
         dtype = dtype if dtype is not None else input.dtype
         requires_grad = requires_grad if requires_grad is not None else input.requires_grad
         return backend, dtype, requires_grad
@@ -211,12 +191,12 @@ class Tensor:
     # ********** Creation Methods **********
     @staticmethod
     def create(data, dtype='float32', requires_grad=False, device='cpu'):
-        backend = Tensor._get_backend(device)
+        backend = Dispatcher.get_backend(device)
         return Tensor(backend.create(data, dtype=dtype), backend=backend, requires_grad=requires_grad)
 
     @staticmethod
     def zeros(shape, dtype='float32', requires_grad=False, device='cpu'):
-        backend = Tensor._get_backend(device)
+        backend = Dispatcher.get_backend(device)
         return Tensor(backend.zeros(shape, dtype=dtype), backend=backend, requires_grad=requires_grad)
 
     @staticmethod
@@ -226,7 +206,7 @@ class Tensor:
 
     @staticmethod
     def ones(shape, dtype='float32', requires_grad=False, device='cpu'):
-        backend = Tensor._get_backend(device)
+        backend = Dispatcher.get_backend(device)
         return Tensor(backend.ones(shape, dtype=dtype), backend=backend, requires_grad=requires_grad)
 
     @staticmethod
@@ -236,22 +216,22 @@ class Tensor:
 
     @staticmethod
     def randn(*shape, dtype='float32', requires_grad=False, device='cpu'):
-        backend = Tensor._get_backend(device)
+        backend = Dispatcher.get_backend(device)
         return Tensor(backend.randn(*shape, dtype=dtype), backend=backend, requires_grad=requires_grad)
 
     @staticmethod
     def rand(*shape, dtype='float32', requires_grad=False, device='cpu'):
-        backend = Tensor._get_backend(device)
+        backend = Dispatcher.get_backend(device)
         return Tensor(backend.rand(*shape, dtype=dtype), backend=backend, requires_grad=requires_grad)
 
     @staticmethod
     def randint(low, high=None, shape=None, *, dtype='int32', requires_grad=False, device='cpu'):
-        backend = Tensor._get_backend(device)
+        backend = Dispatcher.get_backend(device)
         return Tensor(backend.randint(low, high, shape, dtype=dtype), backend=backend, requires_grad=requires_grad)
 
     @staticmethod
     def empty(shape, dtype='float32', requires_grad=False, device='cpu'):
-        backend = Tensor._get_backend(device)
+        backend = Dispatcher.get_backend(device)
         return Tensor(backend.empty(shape, dtype=dtype), backend=backend, requires_grad=requires_grad)
 
     @staticmethod
